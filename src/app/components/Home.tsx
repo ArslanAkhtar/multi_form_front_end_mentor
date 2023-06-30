@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+
+import { styled } from "@mui/system";
 import {
   Box,
   Container,
@@ -10,12 +12,12 @@ import {
   Button,
   Typography,
 } from "../../lib/mui";
+
+import { steps } from "../helpers/constants";
+
 import CopyRight from "./CopyRight";
-
-import { styled } from "@mui/system";
-
 import Info from "./Info";
-//import PaymentForm from './PaymentForm';
+import SelectPlan from "./SelectPlan";
 //import Review from './Review';
 
 const StepSection = styled("div")({
@@ -26,14 +28,17 @@ const StepSection = styled("div")({
   alignItems: "center",
 });
 
-const steps = ["YOUR INFO", "SELECT PLAN", "ADD-ONS", "SUMMARY"];
+const FormWrapper = styled("div")({
+  height: "100%",
+  width: "100%",
+});
 
 function getStepContent(step: number) {
   switch (step) {
     case 0:
       return <Info />;
-    // case 1:
-    //   return <PaymentForm />;
+    case 1:
+      return <SelectPlan />;
     // case 2:
     //   return <Review />;
     default:
@@ -41,10 +46,10 @@ function getStepContent(step: number) {
   }
 }
 
-export default function Checkout() {
+const Home = () => {
   const [activeStep, setActiveStep] = useState(0);
 
-  const [completed, setCompleted] = React.useState<{
+  const [completed, setCompleted] = useState<{
     [k: number]: boolean;
   }>({});
 
@@ -86,11 +91,6 @@ export default function Checkout() {
     setCompleted(newCompleted);
     handleNext();
   };
-
-  const FormWrapper = styled("div")({
-    height: "100%",
-    width: "100%",
-  });
 
   return (
     <>
@@ -153,12 +153,6 @@ export default function Checkout() {
                   alignItems: "flex-end",
                 }}
               >
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Back
-                  </Button>
-                )}
-
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
@@ -183,4 +177,6 @@ export default function Checkout() {
       </Container>
     </>
   );
-}
+};
+
+export default Home;

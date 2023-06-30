@@ -6,7 +6,7 @@ const FormContainer = styled("div")({
   width: "100%",
 });
 
-export default function Info() {
+const Info = () => {
   return (
     <FormContainer>
       <Typography variant="h5" gutterBottom>
@@ -17,7 +17,9 @@ export default function Info() {
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <FormHelperText sx={{ fontWeight: "bold" }}>Full Name</FormHelperText>
+          <FormHelperText sx={{ fontWeight: "bold" }}>
+            Full Name*
+          </FormHelperText>
           <OutlinedInput
             required
             fullWidth
@@ -31,7 +33,7 @@ export default function Info() {
         </Grid>
         <Grid item xs={12}>
           <FormHelperText sx={{ fontWeight: "bold" }}>
-            Email Address
+            Email Address*
           </FormHelperText>
           <OutlinedInput
             required
@@ -46,7 +48,7 @@ export default function Info() {
         </Grid>
         <Grid item xs={12}>
           <FormHelperText sx={{ fontWeight: "bold" }}>
-            Phone Number
+            Phone Number*
           </FormHelperText>
           <OutlinedInput
             required
@@ -62,4 +64,6 @@ export default function Info() {
       </Grid>
     </FormContainer>
   );
-}
+};
+
+export default Info;
