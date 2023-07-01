@@ -31,10 +31,10 @@ const useStepper = () => {
 
   return {
     activeStep,
+    totalSteps,
     handleBack,
     handleNext,
     handleStep,
-    totalSteps,
   };
 };
 
