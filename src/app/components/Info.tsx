@@ -9,10 +9,8 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { styled } from "@mui/system";
 import { FormDataProps } from "../helpers/types";
 
-// Define the Zod schema to validate the input fields
 const schema = z.object({
   name: z.string().nonempty("Full Name is required"),
   email: z
@@ -25,18 +23,16 @@ const schema = z.object({
     .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
 });
 
-// Define the Props interface for the Info component
-interface InfoProps extends FormDataProps {
-  // Add any additional props specific to the Info component, if needed
-}
+//! If data need to updated in the parent component, use the following pattern:
+interface InfoProps extends FormDataProps {}
 
-const FormContainer = styled("div")({
+const FormContainer = {
   height: "100%",
   width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-});
+};
 
 const Info = ({
   activeStep,
@@ -58,8 +54,8 @@ const Info = ({
   };
 
   return (
-    <FormContainer>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+    <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>
+      <Box>
         <Typography variant="h5" gutterBottom>
           Personal info
         </Typography>
@@ -153,38 +149,38 @@ const Info = ({
             />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            mb: 4,
-          }}
-        >
-          {activeStep !== totalSteps && (
-            <>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={activeStep === totalSteps}
-                sx={{ mt: 3, ml: 1 }}
-              >
-                {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
-              </Button>
-            </>
-          )}
-        </Box>
       </Box>
-    </FormContainer>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          mb: 4,
+        }}
+      >
+        {activeStep !== totalSteps && (
+          <>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={activeStep === totalSteps}
+              sx={{ mt: 3, ml: 1 }}
+            >
+              {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
+            </Button>
+          </>
+        )}
+      </Box>
+    </Box>
   );
 };
 

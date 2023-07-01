@@ -1,30 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, Button, Typography } from "@mui/material";
 import { type Plan } from "../helpers/types";
 
 import Arcade from "@mui/icons-material/SmartToy";
 import Advanced from "@mui/icons-material/Laptop";
 import Pro from "@mui/icons-material/Games";
+import { borderColor } from "@mui/system";
 
 interface PlanProps {
   plan: Plan;
+  selectedPlan: Plan | null;
   selectedType: string;
   isSelected?: boolean;
   onSelect: (plan: Plan) => void;
 }
 
-const PlanCard = ({ plan, selectedType, onSelect }: PlanProps) => {
+const PlanCard = ({
+  plan,
+  selectedPlan,
+  selectedType,
+  onSelect,
+}: PlanProps) => {
   const [selected, setSelected] = useState(false);
+  useEffect(() => {
+    if (selectedPlan !== null && selectedPlan.title === plan.title) {
+      setSelected(true);
+    } else {
+      setSelected(false);
+    }
+  }, [selectedPlan, plan]);
 
   const handleSelect = (plan: Plan) => {
     setSelected(true);
-    onSelect(plan);
+    const SelectedPlan = { ...plan, type: selectedType };
+    onSelect(SelectedPlan);
   };
 
   return (
     <Card
-      sx={{ marginRight: "20px", minWidth: 155, cursor: "pointer" }}
-      component={"button"}
+      sx={{
+        marginRight: "20px",
+        minWidth: 155,
+        cursor: "pointer",
+        border: "1px solid",
+        borderColor: selected ? "#3f51b5" : "transparent",
+      }}
+      component={Button}
       onClick={() =>
         handleSelect({
           title: plan.title,

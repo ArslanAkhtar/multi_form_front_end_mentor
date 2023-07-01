@@ -34,6 +34,7 @@ const SelectPlan = ({
 }: FormDataProps) => {
   const [selectedType, setSelectedType] = useState("monthly");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [error, setError] = useState(false);
 
   const handleTypeChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -44,6 +45,16 @@ const SelectPlan = ({
 
   const handleSelectPlan = (plan: Plan) => {
     setSelectedPlan(plan);
+    setError(false);
+  };
+
+  const onSubmit = () => {
+    console.log(selectedPlan);
+    if (selectedPlan === null) {
+      setError(true);
+      return;
+    }
+    handleNext();
   };
 
   return (
@@ -62,11 +73,17 @@ const SelectPlan = ({
                 <PlanCard
                   key={index}
                   plan={plan}
+                  selectedPlan={selectedPlan}
                   selectedType={selectedType}
                   onSelect={handleSelectPlan}
                 />
               ))}
             </CardWrapper>
+            {error && (
+              <Typography sx={{ mt: 2 }} color="error">
+                Please select any plan
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={12}>
             <ToggleButtonGroup
@@ -104,7 +121,7 @@ const SelectPlan = ({
             <Button
               variant="contained"
               disabled={activeStep === totalSteps}
-              onClick={handleNext}
+              onClick={onSubmit}
               sx={{ mt: 3, ml: 1 }}
             >
               {activeStep === totalSteps - 1 ? "Confirm" : "Next"}

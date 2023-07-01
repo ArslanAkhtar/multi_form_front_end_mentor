@@ -1,6 +1,7 @@
 export interface Plan {
   title: string;
   price?: string;
+  type?: string;
   monthlyPrice?: string;
   yearlyPrice?: string;
 }
