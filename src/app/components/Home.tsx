@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-
 import { styled } from "@mui/system";
 import {
   Box,
@@ -10,15 +9,14 @@ import {
   StepButton,
   Step,
   Button,
-  Typography,
 } from "../../lib/mui";
-
 import { steps } from "../helpers/constants";
-
 import CopyRight from "./CopyRight";
 import Info from "./Info";
 import SelectPlan from "./SelectPlan";
-//import Review from './Review';
+import AddOns from "./AddOns";
+import Summary from "./Summary";
+import Complete from "./Complete";
 
 const StepSection = styled("div")({
   height: "100%",
@@ -39,8 +37,12 @@ function getStepContent(step: number) {
       return <Info />;
     case 1:
       return <SelectPlan />;
-    // case 2:
-    //   return <Review />;
+    case 2:
+      return <AddOns />;
+    case 3:
+      return <Summary />;
+    case 4:
+      return <Complete />;
     default:
       throw new Error("Unknown step");
   }
@@ -49,47 +51,31 @@ function getStepContent(step: number) {
 const Home = () => {
   const [activeStep, setActiveStep] = useState(0);
 
-  const [completed, setCompleted] = useState<{
-    [k: number]: boolean;
-  }>({});
+  const handleStep = (step: number) => () => {
+    setActiveStep(step);
+  };
+
+  const handleBack = () => {
+    if (!isFirstStep()) {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (!isLastStep()) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+  };
 
   const totalSteps = () => {
     return steps.length;
   };
 
-  const completedSteps = () => {
-    return Object.keys(completed).length;
-  };
-
   const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
+    return activeStep === totalSteps();
   };
-
-  const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
-  };
-
-  const handleNext = () => {
-    const newActiveStep =
-      isLastStep() && !allStepsCompleted()
-        ? steps.findIndex((step, i) => !(i in completed))
-        : activeStep + 1;
-    setActiveStep(newActiveStep);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStep = (step: number) => () => {
-    setActiveStep(step);
-  };
-
-  const handleComplete = () => {
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
+  const isFirstStep = () => {
+    return activeStep === 0;
   };
 
   return (
@@ -124,7 +110,7 @@ const Home = () => {
                 }}
               >
                 {steps.map((label, index) => (
-                  <Step key={label} completed={completed[index]}>
+                  <Step key={label}>
                     <StepButton
                       color="inherit"
                       onClick={handleStep(index)}
@@ -137,41 +123,38 @@ const Home = () => {
               </Stepper>
             </StepSection>
           </Box>
-          {activeStep === steps.length ? (
-            <>
-              <Typography variant="h5" gutterBottom>
-                Thank you
-              </Typography>
-            </>
-          ) : (
-            <FormWrapper>
-              {getStepContent(activeStep)}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                }}
-              >
-                <Button
-                  color="inherit"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}
-                >
-                  Back
-                </Button>
 
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  Next
-                </Button>
-              </Box>
-            </FormWrapper>
-          )}
+          <FormWrapper>
+            {getStepContent(activeStep)}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+              }}
+            >
+              {activeStep !== steps.length && (
+                <>
+                  <Button
+                    color="inherit"
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    sx={{ mr: 1 }}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="contained"
+                    disabled={activeStep === steps.length}
+                    onClick={handleNext}
+                    sx={{ mt: 3, ml: 1 }}
+                  >
+                    {activeStep === steps.length - 1 ? "Confirm" : "Next"}
+                  </Button>
+                </>
+              )}
+            </Box>
+          </FormWrapper>
         </Paper>
         <CopyRight />
       </Container>
