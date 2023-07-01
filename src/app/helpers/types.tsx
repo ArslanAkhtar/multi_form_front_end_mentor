@@ -4,3 +4,10 @@ export interface Plan {
   monthlyPrice?: string;
   yearlyPrice?: string;
 }
+
+export interface FormDataProps {
+  activeStep: number;
+  totalSteps: number;
+  handleBack: () => void;
+  handleNext: () => void;
+}

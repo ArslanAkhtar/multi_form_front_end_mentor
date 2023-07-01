@@ -18,6 +18,8 @@ import AddOns from "./AddOns";
 import Summary from "./Summary";
 import Complete from "./Complete";
 
+import useStepper from "../customhooks/useStepper";
+
 const StepSection = styled("div")({
   height: "100%",
   display: "flex",
@@ -27,20 +29,55 @@ const StepSection = styled("div")({
 });
 
 const FormWrapper = styled("div")({
-  height: "100%",
   width: "100%",
+  display: "flex",
+  justifyContent: "space-between",
+  flexDirection: "column",
 });
 
-function getStepContent(step: number) {
+function getStepContent(
+  step: number,
+  totalSteps: number,
+  handleBack: () => void,
+  handleNext: () => void
+) {
   switch (step) {
     case 0:
-      return <Info />;
+      return (
+        <Info
+          activeStep={step}
+          totalSteps={totalSteps}
+          handleBack={handleBack}
+          handleNext={handleNext}
+        />
+      );
     case 1:
-      return <SelectPlan />;
+      return (
+        <SelectPlan
+          activeStep={step}
+          totalSteps={totalSteps}
+          handleBack={handleBack}
+          handleNext={handleNext}
+        />
+      );
     case 2:
-      return <AddOns />;
+      return (
+        <AddOns
+          activeStep={step}
+          totalSteps={totalSteps}
+          handleBack={handleBack}
+          handleNext={handleNext}
+        />
+      );
     case 3:
-      return <Summary />;
+      return (
+        <Summary
+          activeStep={step}
+          totalSteps={totalSteps}
+          handleBack={handleBack}
+          handleNext={handleNext}
+        />
+      );
     case 4:
       return <Complete />;
     default:
@@ -49,34 +86,9 @@ function getStepContent(step: number) {
 }
 
 const Home = () => {
-  const [activeStep, setActiveStep] = useState(0);
-
-  const handleStep = (step: number) => () => {
-    setActiveStep(step);
-  };
-
-  const handleBack = () => {
-    if (!isFirstStep()) {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (!isLastStep()) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
-  };
-
-  const totalSteps = () => {
-    return steps.length;
-  };
-
-  const isLastStep = () => {
-    return activeStep === totalSteps();
-  };
-  const isFirstStep = () => {
-    return activeStep === 0;
-  };
+  const [stepOneData, setStepOneData] = useState({});
+  const { activeStep, totalSteps, handleBack, handleNext, handleStep } =
+    useStepper();
 
   return (
     <>
@@ -94,7 +106,7 @@ const Home = () => {
               backgroundImage: `url('/assets/images/bg-sidebar-desktop.svg')`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "contain",
-              height: "55vh",
+              height: "500px",
               width: "50%",
             }}
           >
@@ -125,35 +137,14 @@ const Home = () => {
           </Box>
 
           <FormWrapper>
-            {getStepContent(activeStep)}
+            {getStepContent(activeStep, totalSteps, handleBack, handleNext)}
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
               }}
-            >
-              {activeStep !== steps.length && (
-                <>
-                  <Button
-                    color="inherit"
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    sx={{ mr: 1 }}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    variant="contained"
-                    disabled={activeStep === steps.length}
-                    onClick={handleNext}
-                    sx={{ mt: 3, ml: 1 }}
-                  >
-                    {activeStep === steps.length - 1 ? "Confirm" : "Next"}
-                  </Button>
-                </>
-              )}
-            </Box>
+            ></Box>
           </FormWrapper>
         </Paper>
         <CopyRight />
