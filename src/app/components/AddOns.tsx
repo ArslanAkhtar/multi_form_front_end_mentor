@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Grid, Typography, Button, Box } from "../../lib/mui";
 import { styled } from "@mui/system";
 import { addons } from "../helpers/constants";
-import { FormDataProps } from "../helpers/types";
+import { FormDataProps, AddOns } from "../helpers/types";
 
 const FormContainer = styled("div")({
   height: "100%",
@@ -22,6 +23,14 @@ const AddOns = ({
   handleBack,
   handleNext,
 }: FormDataProps) => {
+  const [selected, setSelected] = useState<AddOns[]>([]);
+
+  const handleSelect = (addon: AddOns) => {
+    console.log(addon);
+    const newArr = [...selected, addon]; // <-- Use the 'addon' parameter here, not 'AddOns'
+    setSelected(newArr);
+  };
+
   return (
     <FormContainer>
       <Box>
@@ -35,19 +44,22 @@ const AddOns = ({
           {addons.map((addon, index) => (
             <Grid item xs={12} key={index}>
               <Box
-                //variant={selected ? 'contained' : 'outlined'}
+                variant={selected.includes(addon) ? "contained" : "outlined"}
                 component={Button}
-                variant="outlined"
+                //variant="outlined"
                 size="large"
                 sx={{ mt: 2, display: "flex", flexDirection: "row" }}
-                //onClick={handleSelect}
+                onClick={() => handleSelect(addon)}
               >
                 <ButtonTitle>
                   <Typography variant="h6" gutterBottom>
                     {addon.title}
                   </Typography>
 
-                  <Typography variant="subtitle2" color={"#656565"}>
+                  <Typography
+                    variant="subtitle2"
+                    color={selected.includes(addon) ? "#fff" : "#656565"}
+                  >
                     {addon.description}
                   </Typography>
                 </ButtonTitle>

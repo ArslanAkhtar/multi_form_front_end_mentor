@@ -12,3 +12,9 @@ export interface FormDataProps {
   handleBack: () => void;
   handleNext: () => void;
 }
+
+export interface AddOns {
+  title: string;
+  description: string;
+  price: string;
+}
