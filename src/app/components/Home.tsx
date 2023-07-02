@@ -8,11 +8,13 @@ import {
   StepButton,
   Step,
 } from "../../lib/mui";
-import { steps } from "../helpers/constants";
 import CopyRight from "./CopyRight";
 
 import useStepper from "../customhooks/useStepper";
 import { getStepContent } from "../helpers/helper";
+
+import { useMyContext } from "../contexts/AppContext";
+import { Wizard } from "../helpers/types";
 
 const StepSection = styled("div")({
   height: "100%",
@@ -32,6 +34,8 @@ const FormWrapper = styled("div")({
 const Home = () => {
   const { activeStep, totalSteps, handleBack, handleNext, handleStep } =
     useStepper();
+
+  const { wizards } = useMyContext();
 
   return (
     <>
@@ -64,14 +68,15 @@ const Home = () => {
                   color: "#fff",
                 }}
               >
-                {steps.map((label, index) => (
-                  <Step key={label}>
+                {wizards.map((item: Wizard, index: number) => (
+                  <Step key={item.name}>
                     <StepButton
                       color="inherit"
+                      disabled={item.locked}
                       onClick={handleStep(index)}
                       sx={{ color: "white" }}
                     >
-                      {label}
+                      {item.name}
                     </StepButton>
                   </Step>
                 ))}

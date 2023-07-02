@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Grid, Typography, Button, Box } from "../../lib/mui";
 import { styled } from "@mui/system";
 import { addons } from "../helpers/constants";
-import { FormDataProps, AddOnsType } from "../helpers/types";
+import { FormDataProps, AddOnsType, Wizard } from "../helpers/types";
 
 import { useMyContext } from "../contexts/AppContext";
 
@@ -25,7 +25,13 @@ const AddOns = ({
   handleBack,
   handleNext,
 }: FormDataProps) => {
-  const { planContext, addOnsContext, setAddOnsContext } = useMyContext();
+  const {
+    planContext,
+    addOnsContext,
+    setAddOnsContext,
+    wizards,
+    setCompletedWizards,
+  } = useMyContext();
   const [selected, setSelected] = useState<AddOnsType[]>([]);
 
   const handleSelect = (addon: AddOnsType) => {
@@ -36,6 +42,11 @@ const AddOns = ({
   };
 
   const onConfirm = () => {
+    const updatedSteps = wizards.map((step: Wizard) =>
+      step.name === "SUMMARY" ? { ...step, locked: false } : step
+    );
+    setCompletedWizards(updatedSteps);
+
     setAddOnsContext(selected);
     handleNext();
   };

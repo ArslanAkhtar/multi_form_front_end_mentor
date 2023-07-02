@@ -26,3 +26,8 @@ export interface Info {
   email: string;
   phoneNumber: string;
 }
+
+export interface Wizard {
+  name: string;
+  locked: boolean;
+}

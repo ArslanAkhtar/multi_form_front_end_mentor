@@ -8,7 +8,7 @@ import {
   Button,
 } from "../../lib/mui";
 import { styled } from "@mui/system";
-import { FormDataProps, type Plan } from "../helpers/types";
+import { FormDataProps, Wizard, type Plan } from "../helpers/types";
 import PlanCard from "./PlanCard";
 
 import { plans } from "../helpers/constants";
@@ -34,7 +34,13 @@ const SelectPlan = ({
   handleBack,
   handleNext,
 }: FormDataProps) => {
-  const { planContext, setPlanContext, setAddOnsContext } = useMyContext();
+  const {
+    planContext,
+    setPlanContext,
+    setAddOnsContext,
+    wizards,
+    setCompletedWizards,
+  } = useMyContext();
   const [selectedType, setSelectedType] = useState<string | undefined>(
     "monthly"
   );
@@ -67,6 +73,12 @@ const SelectPlan = ({
       setError(true);
       return;
     }
+
+    const updatedSteps = wizards.map((step: Wizard) =>
+      step.name === "ADD-ONS" ? { ...step, locked: false } : step
+    );
+    setCompletedWizards(updatedSteps);
+
     setPlanContext(selectedPlan);
     handleNext();
   };

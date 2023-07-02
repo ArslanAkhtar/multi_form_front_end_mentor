@@ -1,4 +1,11 @@
-export const steps = ["YOUR INFO", "SELECT PLAN", "ADD-ONS", "SUMMARY"];
+export const steps = [
+  { name: "YOUR INFO", locked: false },
+  { name: "SELECT PLAN", locked: true },
+  { name: "ADD-ONS", locked: true },
+  { name: "SUMMARY", locked: true },
+];
+
+// export const steps = ["YOUR INFO", "SELECT PLAN", "ADD-ONS", "SUMMARY"];
 export const plans = [
   {
     title: "Arcade",

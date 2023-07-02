@@ -10,7 +10,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import type { FormDataProps, Info } from "../helpers/types";
+import type { FormDataProps, Info, Wizard } from "../helpers/types";
 
 import { useMyContext } from "../contexts/AppContext";
 
@@ -40,8 +40,8 @@ const Info = ({
   handleBack,
   handleNext,
 }: FormDataProps) => {
-  const { infoContext, setInfoContext } = useMyContext();
-
+  const { infoContext, setInfoContext, wizards, setCompletedWizards } =
+    useMyContext();
   const {
     control,
     handleSubmit,
@@ -57,6 +57,12 @@ const Info = ({
   });
 
   const onSubmit = (data: Record<string, string>) => {
+    const updatedSteps = wizards.map((step: Wizard) =>
+      step.name === "SELECT PLAN" ? { ...step, locked: false } : step
+    );
+
+    setCompletedWizards(updatedSteps);
+
     setInfoContext(data as unknown as Info);
     handleNext();
   };

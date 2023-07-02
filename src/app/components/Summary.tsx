@@ -62,7 +62,8 @@ const Summary = ({
                   <Link
                     sx={{ cursor: "pointer" }}
                     onClick={() => {
-                      console.log("hi");
+                      handleBack();
+                      handleBack();
                     }}
                   >
                     Change
@@ -76,8 +77,10 @@ const Summary = ({
                   {planContext?.price}
                 </Typography>
               </Box>
+              {addOnsContext && addOnsContext.length > 0 && (
+                <Divider variant="middle" />
+              )}
 
-              <Divider variant="middle" />
               <Box sx={{ padding: "15px" }}>
                 {/* Apply loop here  */}
                 {addOnsContext?.map((addon, index) => {
