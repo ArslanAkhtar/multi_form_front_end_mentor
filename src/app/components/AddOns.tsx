@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Grid, Typography, Button, Box } from "../../lib/mui";
 import { styled } from "@mui/system";
 import { addons } from "../helpers/constants";
-import { FormDataProps, AddOns } from "../helpers/types";
+import { FormDataProps, AddOnsType } from "../helpers/types";
 
 import { useMyContext } from "../contexts/AppContext";
 
@@ -26,9 +26,9 @@ const AddOns = ({
   handleNext,
 }: FormDataProps) => {
   const { planContext, addOnsContext, setAddOnsContext } = useMyContext();
-  const [selected, setSelected] = useState<AddOns[]>([]);
+  const [selected, setSelected] = useState<AddOnsType[]>([]);
 
-  const handleSelect = (addon: AddOns) => {
+  const handleSelect = (addon: AddOnsType) => {
     addon.price =
       planContext?.type === "monthly" ? addon.monthlyPrice : addon.yearlyPrice;
     const newArr = [...selected, addon];

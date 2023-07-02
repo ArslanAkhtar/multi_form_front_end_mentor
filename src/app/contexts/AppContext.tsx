@@ -1,30 +1,30 @@
 "use client";
 import { createContext, useState, useContext, ReactNode } from "react";
-import type { Info, Plan, AddOns } from "../helpers/types";
+import type { Info, Plan, AddOnsType } from "../helpers/types";
 
 interface AppContextData {
-  info: Info | null;
-  setInfo: React.Dispatch<React.SetStateAction<Info | null>>;
+  infoContext: Info | null;
+  setInfoContext: React.Dispatch<React.SetStateAction<Info | null>>;
 
   planContext: Plan | null;
   setPlanContext: React.Dispatch<React.SetStateAction<Plan | null>>;
 
-  addOnsContext: AddOns[] | [];
-  setAddOnsContext: React.Dispatch<React.SetStateAction<AddOns[] | []>>;
+  addOnsContext: AddOnsType[] | [];
+  setAddOnsContext: React.Dispatch<React.SetStateAction<AddOnsType[] | []>>;
 }
 
 const AppContext = createContext<AppContextData | undefined>(undefined);
 
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [info, setInfo] = useState<Info | null>(null);
+  const [infoContext, setInfoContext] = useState<Info | null>(null);
   const [planContext, setPlanContext] = useState<Plan | null>(null);
-  const [addOnsContext, setAddOnsContext] = useState<AddOns[] | []>([]);
+  const [addOnsContext, setAddOnsContext] = useState<AddOnsType[] | []>([]);
 
   return (
     <AppContext.Provider
       value={{
-        info,
-        setInfo,
+        infoContext,
+        setInfoContext,
         planContext,
         setPlanContext,
         addOnsContext,

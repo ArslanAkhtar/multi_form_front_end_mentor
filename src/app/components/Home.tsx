@@ -1,5 +1,4 @@
 "use client";
-import { useContext } from "react";
 import { styled } from "@mui/system";
 import {
   Box,
@@ -11,13 +10,9 @@ import {
 } from "../../lib/mui";
 import { steps } from "../helpers/constants";
 import CopyRight from "./CopyRight";
-import Info from "./Info";
-import SelectPlan from "./SelectPlan";
-import AddOns from "./AddOns";
-import Summary from "./Summary";
-import Complete from "./Complete";
 
 import useStepper from "../customhooks/useStepper";
+import { getStepContent } from "../helpers/helper";
 
 const StepSection = styled("div")({
   height: "100%",
@@ -33,56 +28,6 @@ const FormWrapper = styled("div")({
   justifyContent: "space-between",
   flexDirection: "column",
 });
-
-function getStepContent(
-  step: number,
-  totalSteps: number,
-  handleBack: () => void,
-  handleNext: () => void
-) {
-  switch (step) {
-    case 0:
-      return (
-        <Info
-          activeStep={step}
-          totalSteps={totalSteps}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    case 1:
-      return (
-        <SelectPlan
-          activeStep={step}
-          totalSteps={totalSteps}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    case 2:
-      return (
-        <AddOns
-          activeStep={step}
-          totalSteps={totalSteps}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    case 3:
-      return (
-        <Summary
-          activeStep={step}
-          totalSteps={totalSteps}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    case 4:
-      return <Complete />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
 
 const Home = () => {
   const { activeStep, totalSteps, handleBack, handleNext, handleStep } =

@@ -26,9 +26,6 @@ const schema = z.object({
     .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
 });
 
-//! If data need to updated in the parent component, use the following pattern:
-interface InfoProps extends FormDataProps {}
-
 const FormContainer = {
   height: "100%",
   width: "100%",
@@ -42,34 +39,33 @@ const Info = ({
   totalSteps,
   handleBack,
   handleNext,
-}: InfoProps) => {
-  const { info, setInfo } = useMyContext();
+}: FormDataProps) => {
+  const { infoContext, setInfoContext } = useMyContext();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue, // Added to set form values with react-hook-form
+    setValue,
   } = useForm<Record<string, string>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: info?.name || "", // Set default values using the info from the context
-      email: info?.email || "",
-      phoneNumber: info?.phoneNumber || "",
+      name: infoContext?.name || "",
+      email: infoContext?.email || "",
+      phoneNumber: infoContext?.phoneNumber || "",
     },
   });
 
   const onSubmit = (data: Record<string, string>) => {
-    setInfo(data as unknown as Info);
+    setInfoContext(data as unknown as Info);
     handleNext();
   };
 
   useEffect(() => {
-    // Set form values when the 'info' from the context changes
-    setValue("name", info?.name || "");
-    setValue("email", info?.email || "");
-    setValue("phoneNumber", info?.phoneNumber || "");
-  }, [info, setValue]);
+    setValue("name", infoContext?.name || "");
+    setValue("email", infoContext?.email || "");
+    setValue("phoneNumber", infoContext?.phoneNumber || "");
+  }, [infoContext, setValue]);
 
   return (
     <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>

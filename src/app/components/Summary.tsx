@@ -8,7 +8,7 @@ import {
   Button,
 } from "../../lib/mui";
 import { styled } from "@mui/system";
-import { AddOns, FormDataProps } from "../helpers/types";
+import type { FormDataProps } from "../helpers/types";
 
 const FormContainer = styled("div")({
   height: "100%",
@@ -19,6 +19,7 @@ const FormContainer = styled("div")({
 });
 
 import { useMyContext } from "../contexts/AppContext";
+import { totalCost } from "../helpers/helper";
 
 const Summary = ({
   activeStep,
@@ -28,17 +29,7 @@ const Summary = ({
 }: FormDataProps) => {
   const { planContext, addOnsContext } = useMyContext();
 
-  const totalCost = () => {
-    const planCost = (planContext?.price as string)
-      .match(/\d+/g)
-      ?.map(Number)[0] || [0];
-
-    const addOnsCost = addOnsContext?.map((item: AddOns) => {
-      return (item.price as string).match(/\d+/g)?.map(Number)[0] || [0];
-    }, 0) as number[];
-    const sumOfAddOns = addOnsCost.reduce((a: number, b: number) => a + b, 0);
-    return (planCost as number) + sumOfAddOns;
-  };
+  const sumOfCost = totalCost(planContext, addOnsContext);
 
   return (
     <FormContainer>
@@ -146,7 +137,7 @@ const Summary = ({
                   color: "#6156e3",
                 }}
               >
-                +${totalCost()}/{planContext?.type === "monthly" ? "mo" : "yr"}
+                {sumOfCost}
               </Typography>
             </Box>
           </Grid>
