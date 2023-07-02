@@ -10,7 +10,7 @@ import { borderColor } from "@mui/system";
 interface PlanProps {
   plan: Plan;
   selectedPlan: Plan | null;
-  selectedType: string;
+  selectedType: string | undefined;
   isSelected?: boolean;
   onSelect: (plan: Plan) => void;
 }

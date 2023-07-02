@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Grid, Typography, Button, Box } from "../../lib/mui";
 import { styled } from "@mui/system";
 import { addons } from "../helpers/constants";
 import { FormDataProps, AddOns } from "../helpers/types";
+
+import { useMyContext } from "../contexts/AppContext";
 
 const FormContainer = styled("div")({
   height: "100%",
@@ -23,14 +25,24 @@ const AddOns = ({
   handleBack,
   handleNext,
 }: FormDataProps) => {
+  const { planContext, addOnsContext, setAddOnsContext } = useMyContext();
   const [selected, setSelected] = useState<AddOns[]>([]);
 
   const handleSelect = (addon: AddOns) => {
-    console.log(addon);
-    const newArr = [...selected, addon]; // <-- Use the 'addon' parameter here, not 'AddOns'
+    addon.price =
+      planContext?.type === "monthly" ? addon.monthlyPrice : addon.yearlyPrice;
+    const newArr = [...selected, addon];
     setSelected(newArr);
   };
 
+  const onConfirm = () => {
+    setAddOnsContext(selected);
+    handleNext();
+  };
+
+  useEffect(() => {
+    setSelected(addOnsContext);
+  }, [addOnsContext]);
   return (
     <FormContainer>
       <Box>
@@ -46,7 +58,6 @@ const AddOns = ({
               <Box
                 variant={selected.includes(addon) ? "contained" : "outlined"}
                 component={Button}
-                //variant="outlined"
                 size="large"
                 sx={{ mt: 2, display: "flex", flexDirection: "row" }}
                 onClick={() => handleSelect(addon)}
@@ -68,7 +79,9 @@ const AddOns = ({
                   gutterBottom
                   sx={{ marginLeft: "40px" }}
                 >
-                  {addon.price}
+                  {planContext?.type === "monthly"
+                    ? addon.monthlyPrice
+                    : addon.yearlyPrice}
                 </Typography>
               </Box>
             </Grid>
@@ -97,7 +110,7 @@ const AddOns = ({
             <Button
               variant="contained"
               disabled={activeStep === totalSteps}
-              onClick={handleNext}
+              onClick={onConfirm}
               sx={{ mt: 3, ml: 1 }}
             >
               {activeStep === totalSteps - 1 ? "Confirm" : "Next"}

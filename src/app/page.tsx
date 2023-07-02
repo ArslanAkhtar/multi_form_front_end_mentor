@@ -1,10 +1,12 @@
 import styles from "./page.module.css";
 import Home from "./components/Home";
-
+import { AppContextProvider } from "./contexts/AppContext";
 export default function App() {
   return (
-    <main className={styles.main}>
-      <Home />
-    </main>
+    <AppContextProvider>
+      <main className={styles.main}>
+        <Home />
+      </main>
+    </AppContextProvider>
   );
 }

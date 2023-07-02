@@ -16,5 +16,13 @@ export interface FormDataProps {
 export interface AddOns {
   title: string;
   description: string;
-  price: string;
+  price?: string;
+  monthlyPrice?: string;
+  yearlyPrice?: string;
+}
+
+export interface Info {
+  name: string;
+  email: string;
+  phoneNumber: string;
 }

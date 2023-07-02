@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,7 +10,9 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { FormDataProps } from "../helpers/types";
+import type { FormDataProps, Info } from "../helpers/types";
+
+import { useMyContext } from "../contexts/AppContext";
 
 const schema = z.object({
   name: z.string().nonempty("Full Name is required"),
@@ -40,23 +43,38 @@ const Info = ({
   handleBack,
   handleNext,
 }: InfoProps) => {
+  const { info, setInfo } = useMyContext();
+
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setValue, // Added to set form values with react-hook-form
   } = useForm<Record<string, string>>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: info?.name || "", // Set default values using the info from the context
+      email: info?.email || "",
+      phoneNumber: info?.phoneNumber || "",
+    },
   });
 
   const onSubmit = (data: Record<string, string>) => {
-    console.log(data);
+    setInfo(data as unknown as Info);
     handleNext();
   };
+
+  useEffect(() => {
+    // Set form values when the 'info' from the context changes
+    setValue("name", info?.name || "");
+    setValue("email", info?.email || "");
+    setValue("phoneNumber", info?.phoneNumber || "");
+  }, [info, setValue]);
 
   return (
     <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>
       <Box>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h4" gutterBottom>
           Personal info
         </Typography>
         <Typography variant="subtitle2" color="#656565" gutterBottom>
@@ -70,7 +88,6 @@ const Info = ({
             <Controller
               name="name"
               control={control}
-              defaultValue=""
               render={({ field }) => (
                 <>
                   <OutlinedInput
@@ -78,13 +95,15 @@ const Info = ({
                     required
                     fullWidth
                     placeholder="e.g. Stephen King"
-                    aria-describedby="outlined-name-helper-text"
+                    aria-describedby="name-helper-text"
                     inputProps={{
                       "aria-label": "name",
                     }}
                   />
                   {errors.name && (
-                    <Typography color="error">{errors.name.message}</Typography>
+                    <Typography variant="body2" color="error">
+                      {errors.name.message}
+                    </Typography>
                   )}
                 </>
               )}
@@ -97,7 +116,6 @@ const Info = ({
             <Controller
               name="email"
               control={control}
-              defaultValue=""
               render={({ field }) => (
                 <>
                   <OutlinedInput
@@ -105,13 +123,13 @@ const Info = ({
                     required
                     fullWidth
                     placeholder="e.g. stephenking@lorem.com"
-                    aria-describedby="outlined-email-helper-text"
+                    aria-describedby="email-helper-text"
                     inputProps={{
                       "aria-label": "email",
                     }}
                   />
                   {errors.email && (
-                    <Typography color="error">
+                    <Typography variant="body2" color="error">
                       {errors.email.message}
                     </Typography>
                   )}
@@ -126,7 +144,6 @@ const Info = ({
             <Controller
               name="phoneNumber"
               control={control}
-              defaultValue=""
               render={({ field }) => (
                 <>
                   <OutlinedInput
@@ -134,13 +151,13 @@ const Info = ({
                     required
                     fullWidth
                     placeholder="e.g. +1 234 567 890"
-                    aria-describedby="outlined-phoneNumber-helper-text"
+                    aria-describedby="phoneNumber-helper-text"
                     inputProps={{
                       "aria-label": "Phone Number",
                     }}
                   />
                   {errors.phoneNumber && (
-                    <Typography color="error">
+                    <Typography variant="body2" color="error">
                       {errors.phoneNumber.message}
                     </Typography>
                   )}

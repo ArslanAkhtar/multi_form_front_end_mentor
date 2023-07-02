@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useContext } from "react";
 import { styled } from "@mui/system";
 import {
   Box,
@@ -85,7 +85,6 @@ function getStepContent(
 }
 
 const Home = () => {
-  const [stepOneData, setStepOneData] = useState({});
   const { activeStep, totalSteps, handleBack, handleNext, handleStep } =
     useStepper();
 

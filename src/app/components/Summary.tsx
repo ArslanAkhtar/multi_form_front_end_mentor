@@ -8,7 +8,7 @@ import {
   Button,
 } from "../../lib/mui";
 import { styled } from "@mui/system";
-import { FormDataProps } from "../helpers/types";
+import { AddOns, FormDataProps } from "../helpers/types";
 
 const FormContainer = styled("div")({
   height: "100%",
@@ -18,12 +18,28 @@ const FormContainer = styled("div")({
   justifyContent: "space-between",
 });
 
+import { useMyContext } from "../contexts/AppContext";
+
 const Summary = ({
   activeStep,
   totalSteps,
   handleBack,
   handleNext,
 }: FormDataProps) => {
+  const { planContext, addOnsContext } = useMyContext();
+
+  const totalCost = () => {
+    const planCost = (planContext?.price as string)
+      .match(/\d+/g)
+      ?.map(Number)[0] || [0];
+
+    const addOnsCost = addOnsContext?.map((item: AddOns) => {
+      return (item.price as string).match(/\d+/g)?.map(Number)[0] || [0];
+    }, 0) as number[];
+    const sumOfAddOns = addOnsCost.reduce((a: number, b: number) => a + b, 0);
+    return (planCost as number) + sumOfAddOns;
+  };
+
   return (
     <FormContainer>
       <Box>
@@ -50,7 +66,7 @@ const Summary = ({
                     gutterBottom
                     sx={{ fontWeight: "normal" }}
                   >
-                    Arcade (Monthly)
+                    {planContext?.title} ({planContext?.type})
                   </Typography>
                   <Link
                     sx={{ cursor: "pointer" }}
@@ -66,72 +82,41 @@ const Summary = ({
                   gutterBottom
                   sx={{ mt: 2, ml: 2, fontWeight: "bolder" }}
                 >
-                  $9/mo
+                  {planContext?.price}
                 </Typography>
               </Box>
 
               <Divider variant="middle" />
               <Box sx={{ padding: "15px" }}>
                 {/* Apply loop here  */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
-                    variant="subtitle1"
-                    gutterBottom
-                    sx={{
-                      fontWeight: "normal",
-                      color: "#c8c8d2",
-                    }}
-                  >
-                    Online service
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    gutterBottom
-                    sx={{
-                      fontWeight: "normal",
-
-                      color: "#3e4a5e",
-                    }}
-                  >
-                    +$1/mo
-                  </Typography>
-                </Box>
-                {/* Remove this  */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
-                    variant="subtitle1"
-                    gutterBottom
-                    sx={{
-                      fontWeight: "normal",
-                      color: "#c8c8d2",
-                    }}
-                  >
-                    Larger storage
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    gutterBottom
-                    sx={{
-                      fontWeight: "normal",
-
-                      color: "#3e4a5e",
-                    }}
-                  >
-                    +$2/mo
-                  </Typography>
-                </Box>
+                {addOnsContext?.map((addon, index) => {
+                  return (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        mt: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        gutterBottom
+                        sx={{ fontWeight: "normal" }}
+                      >
+                        {addon.title}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        gutterBottom
+                        sx={{ fontWeight: "normal" }}
+                      >
+                        {addon.price}
+                      </Typography>
+                    </Box>
+                  );
+                })}
               </Box>
             </Paper>
             <Box
@@ -161,7 +146,7 @@ const Summary = ({
                   color: "#6156e3",
                 }}
               >
-                +$12/mo
+                +${totalCost()}/{planContext?.type === "monthly" ? "mo" : "yr"}
               </Typography>
             </Box>
           </Grid>

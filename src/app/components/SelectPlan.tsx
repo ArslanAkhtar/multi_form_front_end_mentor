@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Grid,
   Typography,
@@ -12,6 +12,8 @@ import { FormDataProps, type Plan } from "../helpers/types";
 import PlanCard from "./PlanCard";
 
 import { plans } from "../helpers/constants";
+
+import { useMyContext } from "../contexts/AppContext";
 
 const FormContainer = styled("div")({
   height: "100%",
@@ -32,15 +34,27 @@ const SelectPlan = ({
   handleBack,
   handleNext,
 }: FormDataProps) => {
-  const [selectedType, setSelectedType] = useState("monthly");
+  const { planContext, setPlanContext, setAddOnsContext } = useMyContext();
+  const [selectedType, setSelectedType] = useState<string | undefined>(
+    "monthly"
+  );
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (planContext !== null) {
+      setSelectedType(planContext.type);
+      setSelectedPlan(planContext);
+    }
+  }, [planContext]);
 
   const handleTypeChange = (
     event: React.MouseEvent<HTMLElement>,
     newType: string
   ) => {
     setSelectedType(newType);
+    setSelectedPlan(null);
+    setAddOnsContext([]);
   };
 
   const handleSelectPlan = (plan: Plan) => {
@@ -49,11 +63,11 @@ const SelectPlan = ({
   };
 
   const onSubmit = () => {
-    console.log(selectedPlan);
     if (selectedPlan === null) {
       setError(true);
       return;
     }
+    setPlanContext(selectedPlan);
     handleNext();
   };
 
