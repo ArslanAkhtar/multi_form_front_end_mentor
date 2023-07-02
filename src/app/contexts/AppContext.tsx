@@ -2,18 +2,16 @@
 import { createContext, useState, useContext, ReactNode } from "react";
 import type { Info, Plan, AddOnsType, Wizard } from "../helpers/types";
 import { steps } from "../helpers/constants";
+
 interface AppContextData {
   wizards: Wizard[];
   setCompletedWizards: React.Dispatch<React.SetStateAction<Wizard[]>>;
-
   infoContext: Info | null;
   setInfoContext: React.Dispatch<React.SetStateAction<Info | null>>;
-
   planContext: Plan | null;
   setPlanContext: React.Dispatch<React.SetStateAction<Plan | null>>;
-
-  addOnsContext: AddOnsType[] | [];
-  setAddOnsContext: React.Dispatch<React.SetStateAction<AddOnsType[] | []>>;
+  addOnsContext: AddOnsType[];
+  setAddOnsContext: React.Dispatch<React.SetStateAction<AddOnsType[]>>;
 }
 
 const AppContext = createContext<AppContextData | undefined>(undefined);
@@ -22,7 +20,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [wizards, setCompletedWizards] = useState<Wizard[]>(steps);
   const [infoContext, setInfoContext] = useState<Info | null>(null);
   const [planContext, setPlanContext] = useState<Plan | null>(null);
-  const [addOnsContext, setAddOnsContext] = useState<AddOnsType[] | []>([]);
+  const [addOnsContext, setAddOnsContext] = useState<AddOnsType[]>([]);
 
   return (
     <AppContext.Provider
