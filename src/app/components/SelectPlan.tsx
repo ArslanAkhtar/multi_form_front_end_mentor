@@ -26,6 +26,11 @@ const FormContainer = styled("div")({
 const CardWrapper = styled("div")({
   display: "flex",
   flexWrap: "wrap",
+  gap: "20px",
+
+  "@media (max-width:600px)": {
+    flexDirection: "column",
+  },
 });
 
 const SelectPlan = ({
@@ -83,6 +88,34 @@ const SelectPlan = ({
     handleNext();
   };
 
+  const NavigationContainer = {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    mb: "10px",
+    mt: "20px",
+
+    "@media (max-width:600px)": {
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      width: "100%",
+      padding: "20px",
+      backgroundColor: "#fff",
+      marginBottom: 0,
+    },
+  };
+
+  const ToggleWrapper = {
+    mt: 2,
+    mb: 4,
+    "@media (max-width:600px)": {
+      mt: 1,
+      mb: 2,
+    },
+  };
+
   return (
     <FormContainer>
       <Box>
@@ -117,7 +150,7 @@ const SelectPlan = ({
               exclusive
               onChange={handleTypeChange}
               aria-label="Plan Type Toggle"
-              sx={{ mt: 2, mb: 4 }}
+              sx={ToggleWrapper}
             >
               <ToggleButton value="monthly">Monthly</ToggleButton>
               <ToggleButton value="yearly">Yearly</ToggleButton>
@@ -125,22 +158,13 @@ const SelectPlan = ({
           </Grid>
         </Grid>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          mb: 4,
-        }}
-      >
+      <Box sx={NavigationContainer}>
         {activeStep !== totalSteps && (
           <>
             <Button
               color="inherit"
               disabled={activeStep === 0}
               onClick={handleBack}
-              sx={{ mr: 1 }}
             >
               Back
             </Button>
@@ -148,7 +172,6 @@ const SelectPlan = ({
               variant="contained"
               disabled={activeStep === totalSteps}
               onClick={onSubmit}
-              sx={{ mt: 3, ml: 1 }}
             >
               {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
             </Button>

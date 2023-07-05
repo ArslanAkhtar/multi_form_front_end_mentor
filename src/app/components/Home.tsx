@@ -9,7 +9,8 @@ import {
   Step,
   useMediaQuery,
   useTheme,
-} from "../../lib/mui";
+  Typography,
+} from "@/lib/mui";
 import CopyRight from "./CopyRight";
 
 import { getStepContent } from "../helpers/helper";
@@ -98,6 +99,7 @@ const Home = () => {
                   pt: 3,
                   pb: 5,
                   color: "#fff",
+                  borderTop: "none",
                 }}
               >
                 {wizards.map((item: Wizard, index: number) => (
@@ -123,19 +125,42 @@ const Home = () => {
                   nonLinear
                   orientation="vertical"
                   sx={{
-                    pt: 3,
-                    pb: 5,
                     color: "#fff",
+                    ".MuiStepConnector-lineVertical": {
+                      border: "none",
+                    },
                   }}
                 >
                   {wizards.map((item: Wizard, index: number) => (
-                    <Step key={item.name}>
+                    <Step
+                      key={item.name}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
                       <StepButton
                         color="inherit"
                         disabled={item.locked}
                         onClick={handleStep(index)}
-                        sx={{ color: "white" }}
+                        sx={{
+                          color: "white",
+                          width: "auto",
+                        }}
                       />
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <Typography variant="subtitle2" color="#7d78ff">
+                          STEP {index + 1}
+                        </Typography>
+                        <Typography
+                          variant="subtitle2"
+                          color="#fff"
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          {item.name}
+                        </Typography>
+                      </Box>
                     </Step>
                   ))}
                 </Stepper>

@@ -34,6 +34,25 @@ const FormContainer = {
   justifyContent: "space-between",
 };
 
+const NavigationContainer = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "flex-end",
+  mb: "10px",
+  mt: "20px",
+
+  "@media (max-width:600px)": {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    padding: "20px",
+    backgroundColor: "#fff",
+    marginBottom: 0,
+  },
+};
+
 const Info = ({
   activeStep,
   totalSteps,
@@ -169,22 +188,13 @@ const Info = ({
           </Grid>
         </Grid>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          mb: 4,
-        }}
-      >
+      <Box sx={NavigationContainer}>
         {activeStep !== totalSteps && (
           <>
             <Button
               color="inherit"
               disabled={activeStep === 0}
               onClick={handleBack}
-              sx={{ mr: 1 }}
             >
               Back
             </Button>
@@ -192,7 +202,6 @@ const Info = ({
               type="submit"
               variant="contained"
               disabled={activeStep === totalSteps}
-              sx={{ mt: 3, ml: 1 }}
             >
               {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
             </Button>
