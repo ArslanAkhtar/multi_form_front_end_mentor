@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import { addons } from "../helpers/constants";
 import { FormDataProps, AddOnsType, Wizard } from "../helpers/types";
 
-import { useMyContext } from "../contexts/AppContext";
+import { useFormWizardContext } from "../contexts/FormWizardContext";
 
 const FormContainer = styled("div")({
   height: "100%",
@@ -31,7 +31,7 @@ const AddOns = ({
     setAddOnsContext,
     wizards,
     setCompletedWizards,
-  } = useMyContext();
+  } = useFormWizardContext();
   const [selected, setSelected] = useState<AddOnsType[]>([]);
 
   const handleSelect = (addon: AddOnsType) => {

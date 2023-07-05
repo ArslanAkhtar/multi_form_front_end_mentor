@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import type { FormDataProps, Info, Wizard } from "../helpers/types";
 
-import { useMyContext } from "../contexts/AppContext";
+import { useFormWizardContext } from "../contexts/FormWizardContext";
 
 const schema = z.object({
   name: z.string().nonempty("Full Name is required"),
@@ -41,7 +41,7 @@ const Info = ({
   handleNext,
 }: FormDataProps) => {
   const { infoContext, setInfoContext, wizards, setCompletedWizards } =
-    useMyContext();
+    useFormWizardContext();
   const {
     control,
     handleSubmit,

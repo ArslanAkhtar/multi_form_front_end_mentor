@@ -18,7 +18,7 @@ const FormContainer = styled("div")({
   justifyContent: "space-between",
 });
 
-import { useMyContext } from "../contexts/AppContext";
+import { useFormWizardContext } from "../contexts/FormWizardContext";
 import { totalCost } from "../helpers/helper";
 
 const Summary = ({
@@ -27,7 +27,7 @@ const Summary = ({
   handleBack,
   handleNext,
 }: FormDataProps) => {
-  const { planContext, addOnsContext } = useMyContext();
+  const { planContext, addOnsContext } = useFormWizardContext();
 
   const sumOfCost = totalCost(planContext, addOnsContext);
 

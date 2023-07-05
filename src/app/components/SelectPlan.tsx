@@ -13,7 +13,7 @@ import PlanCard from "./PlanCard";
 
 import { plans } from "../helpers/constants";
 
-import { useMyContext } from "../contexts/AppContext";
+import { useFormWizardContext } from "../contexts/FormWizardContext";
 
 const FormContainer = styled("div")({
   height: "100%",
@@ -40,7 +40,7 @@ const SelectPlan = ({
     setAddOnsContext,
     wizards,
     setCompletedWizards,
-  } = useMyContext();
+  } = useFormWizardContext();
   const [selectedType, setSelectedType] = useState<string | undefined>(
     "monthly"
   );
