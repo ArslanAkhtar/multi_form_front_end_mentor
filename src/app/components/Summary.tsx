@@ -1,38 +1,33 @@
-import {
-  Grid,
-  Typography,
-  Paper,
-  Box,
-  Link,
-  Divider,
-  Button,
-} from "../../lib/mui";
-import { styled } from "@mui/system";
-import type { FormDataProps } from "../helpers/types";
+import { Grid, Typography, Paper, Box, Link, Divider } from "../../lib/mui";
 
-const FormContainer = styled("div")({
+const FormContainer = {
   height: "100%",
   width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-});
+};
+
+import { useForm } from "react-hook-form";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
 import { totalCost } from "../helpers/helper";
+import ButtonNavigation from "./subComponents/ButtonNavigation";
 
-const Summary = ({
-  activeStep,
-  totalSteps,
-  handleBack,
-  handleNext,
-}: FormDataProps) => {
-  const { planContext, addOnsContext } = useFormWizardContext();
+const Summary = () => {
+  const { handleSubmit } = useForm();
+
+  const { planContext, addOnsContext, handleBack, handleNext, handleStep } =
+    useFormWizardContext();
 
   const sumOfCost = totalCost(planContext, addOnsContext);
 
   return (
-    <FormContainer>
+    <Box
+      sx={FormContainer}
+      component="form"
+      onSubmit={handleSubmit(handleNext)}
+    >
       <Box>
         <Typography variant="h5" gutterBottom>
           Finishing up
@@ -62,8 +57,7 @@ const Summary = ({
                   <Link
                     sx={{ cursor: "pointer" }}
                     onClick={() => {
-                      handleBack();
-                      handleBack();
+                      () => handleStep(1);
                     }}
                   >
                     Change
@@ -82,7 +76,6 @@ const Summary = ({
               )}
 
               <Box sx={{ padding: "15px" }}>
-                {/* Apply loop here  */}
                 {addOnsContext?.map((addon, index) => {
                   return (
                     <Box
@@ -146,37 +139,8 @@ const Summary = ({
           </Grid>
         </Grid>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          mb: 4,
-        }}
-      >
-        {activeStep !== totalSteps && (
-          <>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Button
-              variant="contained"
-              disabled={activeStep === totalSteps}
-              onClick={handleNext}
-              sx={{ mt: 3, ml: 1 }}
-            >
-              {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
-            </Button>
-          </>
-        )}
-      </Box>
-    </FormContainer>
+      <ButtonNavigation />
+    </Box>
   );
 };
 

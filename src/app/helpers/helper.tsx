@@ -20,45 +20,12 @@ export const totalCost = (
   }`;
 };
 
-export const getStepContent = (
-  step: number,
-  totalSteps: number,
-  handleBack: () => void,
-  handleNext: () => void
-): React.ReactNode => {
+export const getStepContent = (step: number): React.ReactNode => {
   const componentsMap: { [key: number]: React.ReactNode } = {
-    0: (
-      <Info
-        activeStep={step}
-        totalSteps={totalSteps}
-        handleBack={handleBack}
-        handleNext={handleNext}
-      />
-    ),
-    1: (
-      <SelectPlan
-        activeStep={step}
-        totalSteps={totalSteps}
-        handleBack={handleBack}
-        handleNext={handleNext}
-      />
-    ),
-    2: (
-      <AddOns
-        activeStep={step}
-        totalSteps={totalSteps}
-        handleBack={handleBack}
-        handleNext={handleNext}
-      />
-    ),
-    3: (
-      <Summary
-        activeStep={step}
-        totalSteps={totalSteps}
-        handleBack={handleBack}
-        handleNext={handleNext}
-      />
-    ),
+    0: <Info />,
+    1: <SelectPlan />,
+    2: <AddOns />,
+    3: <Summary />,
     4: <Complete />,
   };
 

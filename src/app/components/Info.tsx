@@ -7,10 +7,9 @@ import {
   Typography,
   OutlinedInput,
   FormHelperText,
-  Button,
   Box,
 } from "@mui/material";
-import type { FormDataProps, Info, Wizard } from "../helpers/types";
+import type { Info, Wizard } from "../helpers/types";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
 
@@ -34,33 +33,16 @@ const FormContainer = {
   justifyContent: "space-between",
 };
 
-const NavigationContainer = {
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "flex-end",
-  mb: "10px",
-  mt: "20px",
+import ButtonNavigation from "./subComponents/ButtonNavigation";
 
-  "@media (max-width:600px)": {
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    padding: "20px",
-    backgroundColor: "#fff",
-    marginBottom: 0,
-  },
-};
-
-const Info = ({
-  activeStep,
-  totalSteps,
-  handleBack,
-  handleNext,
-}: FormDataProps) => {
-  const { infoContext, setInfoContext, wizards, setCompletedWizards } =
-    useFormWizardContext();
+const Info = () => {
+  const {
+    infoContext,
+    setInfoContext,
+    wizards,
+    setCompletedWizards,
+    handleNext,
+  } = useFormWizardContext();
   const {
     control,
     handleSubmit,
@@ -188,26 +170,8 @@ const Info = ({
           </Grid>
         </Grid>
       </Box>
-      <Box sx={NavigationContainer}>
-        {activeStep !== totalSteps && (
-          <>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={activeStep === totalSteps}
-            >
-              {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
-            </Button>
-          </>
-        )}
-      </Box>
+
+      <ButtonNavigation />
     </Box>
   );
 };

@@ -6,13 +6,6 @@ export interface Plan {
   yearlyPrice?: string;
 }
 
-export interface FormDataProps {
-  activeStep: number;
-  totalSteps: number;
-  handleBack: () => void;
-  handleNext: () => void;
-}
-
 export interface AddOnsType {
   title: string;
   description: string;

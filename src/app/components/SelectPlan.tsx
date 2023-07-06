@@ -5,23 +5,25 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Box,
-  Button,
 } from "../../lib/mui";
 import { styled } from "@mui/system";
-import { FormDataProps, Wizard, type Plan } from "../helpers/types";
-import PlanCard from "./PlanCard";
+import { Wizard, type Plan } from "../helpers/types";
+import PlanCard from "./subComponents/PlanCard";
 
 import { plans } from "../helpers/constants";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
+import ButtonNavigation from "./subComponents/ButtonNavigation";
 
-const FormContainer = styled("div")({
+import { useForm } from "react-hook-form";
+
+const FormContainer = {
   height: "100%",
   width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-});
+};
 
 const CardWrapper = styled("div")({
   display: "flex",
@@ -33,18 +35,16 @@ const CardWrapper = styled("div")({
   },
 });
 
-const SelectPlan = ({
-  activeStep,
-  totalSteps,
-  handleBack,
-  handleNext,
-}: FormDataProps) => {
+const SelectPlan = () => {
+  const { handleSubmit } = useForm();
+
   const {
     planContext,
     setPlanContext,
     setAddOnsContext,
     wizards,
     setCompletedWizards,
+    handleNext,
   } = useFormWizardContext();
   const [selectedType, setSelectedType] = useState<string | undefined>(
     "monthly"
@@ -117,7 +117,7 @@ const SelectPlan = ({
   };
 
   return (
-    <FormContainer>
+    <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>
       <Box>
         <Typography variant="h5" gutterBottom>
           Select your plan
@@ -158,27 +158,9 @@ const SelectPlan = ({
           </Grid>
         </Grid>
       </Box>
-      <Box sx={NavigationContainer}>
-        {activeStep !== totalSteps && (
-          <>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </Button>
-            <Button
-              variant="contained"
-              disabled={activeStep === totalSteps}
-              onClick={onSubmit}
-            >
-              {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
-            </Button>
-          </>
-        )}
-      </Box>
-    </FormContainer>
+
+      <ButtonNavigation />
+    </Box>
   );
 };
 

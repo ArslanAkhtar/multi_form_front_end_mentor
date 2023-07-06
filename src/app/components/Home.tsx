@@ -1,30 +1,11 @@
 "use client";
 import { styled } from "@mui/system";
-import {
-  Box,
-  Container,
-  Paper,
-  Stepper,
-  StepButton,
-  Step,
-  useMediaQuery,
-  useTheme,
-  Typography,
-} from "@/lib/mui";
+import { Box, Container, Paper, useMediaQuery, useTheme } from "@/lib/mui";
 import CopyRight from "./CopyRight";
-
 import { getStepContent } from "../helpers/helper";
-
 import { useFormWizardContext } from "../contexts/FormWizardContext";
-import { Wizard } from "../helpers/types";
-
-const StepSection = styled("div")({
-  height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-});
+import StepperMobile from "./subComponents/stepper/StepperMobile";
+import StepperDesktop from "./subComponents/stepper/StepperDesktop";
 
 const FormWrapper = styled("div")({
   width: "100%",
@@ -46,40 +27,8 @@ const FormContainer = {
   },
 };
 
-const FormNavigation = {
-  backgroundImage: `url('/assets/images/bg-sidebar-desktop.svg')`,
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "contain",
-  height: "500px",
-  width: "50%",
-
-  "@media (max-width:800px)": {
-    backgroundSize: "cover",
-    marginRight: "20px",
-  },
-};
-
-const FormNavigationMobile = {
-  backgroundImage: `url('/assets/images/bg-sidebar-mobile.svg')`,
-  backgroundRepeat: "no-repeat",
-  width: "100%",
-  backgroundSize: "cover",
-  height: "200px",
-  position: "absolute",
-  zIndex: 0,
-  top: 0,
-  left: 0,
-};
-
 const Home = () => {
-  const {
-    wizards,
-    activeStep,
-    totalSteps,
-    handleBack,
-    handleNext,
-    handleStep,
-  } = useFormWizardContext();
+  const { activeStep } = useFormWizardContext();
 
   const theme = useTheme();
 
@@ -88,88 +37,11 @@ const Home = () => {
   return (
     <>
       <Container component="main" maxWidth="md" sx={{ mb: 6 }}>
-        {isMobile && (
-          <Box sx={FormNavigationMobile}>
-            <StepSection>
-              <Stepper
-                activeStep={activeStep}
-                nonLinear
-                orientation="horizontal"
-                sx={{
-                  pt: 3,
-                  pb: 5,
-                  color: "#fff",
-                  borderTop: "none",
-                }}
-              >
-                {wizards.map((item: Wizard, index: number) => (
-                  <Step key={item.name}>
-                    <StepButton
-                      color="inherit"
-                      disabled={item.locked}
-                      onClick={handleStep(index)}
-                      sx={{ color: "white" }}
-                    />
-                  </Step>
-                ))}
-              </Stepper>
-            </StepSection>
-          </Box>
-        )}
+        {isMobile && <StepperMobile />}
         <Paper sx={FormContainer}>
-          {!isMobile && (
-            <Box sx={FormNavigation}>
-              <StepSection>
-                <Stepper
-                  activeStep={activeStep}
-                  nonLinear
-                  orientation="vertical"
-                  sx={{
-                    color: "#fff",
-                    ".MuiStepConnector-lineVertical": {
-                      border: "none",
-                    },
-                  }}
-                >
-                  {wizards.map((item: Wizard, index: number) => (
-                    <Step
-                      key={item.name}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <StepButton
-                        color="inherit"
-                        disabled={item.locked}
-                        onClick={handleStep(index)}
-                        sx={{
-                          color: "white",
-                          width: "auto",
-                        }}
-                      />
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <Typography variant="subtitle2" color="#7d78ff">
-                          STEP {index + 1}
-                        </Typography>
-                        <Typography
-                          variant="subtitle2"
-                          color="#fff"
-                          sx={{ fontWeight: "bold" }}
-                        >
-                          {item.name}
-                        </Typography>
-                      </Box>
-                    </Step>
-                  ))}
-                </Stepper>
-              </StepSection>
-            </Box>
-          )}
-
+          {!isMobile && <StepperDesktop />}
           <FormWrapper>
-            {getStepContent(activeStep, totalSteps, handleBack, handleNext)}
+            {getStepContent(activeStep)}
             <Box
               sx={{
                 display: "flex",

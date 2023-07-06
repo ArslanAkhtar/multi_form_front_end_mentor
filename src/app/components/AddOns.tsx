@@ -2,35 +2,35 @@ import { useState, useEffect } from "react";
 import { Grid, Typography, Button, Box } from "../../lib/mui";
 import { styled } from "@mui/system";
 import { addons } from "../helpers/constants";
-import { FormDataProps, AddOnsType, Wizard } from "../helpers/types";
+import { AddOnsType, Wizard } from "../helpers/types";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
+import { useForm } from "react-hook-form";
+import ButtonNavigation from "./subComponents/ButtonNavigation";
 
-const FormContainer = styled("div")({
+const FormContainer = {
   height: "100%",
   width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-});
+};
 
 const ButtonTitle = styled("div")({
   display: "flex",
   flexDirection: "column",
 });
 
-const AddOns = ({
-  activeStep,
-  totalSteps,
-  handleBack,
-  handleNext,
-}: FormDataProps) => {
+const AddOns = () => {
+  const { handleSubmit } = useForm();
+
   const {
     planContext,
     addOnsContext,
     setAddOnsContext,
     wizards,
     setCompletedWizards,
+    handleNext,
   } = useFormWizardContext();
   const [selected, setSelected] = useState<AddOnsType[]>([]);
 
@@ -41,7 +41,7 @@ const AddOns = ({
     setSelected(newArr);
   };
 
-  const onConfirm = () => {
+  const onSubmit = () => {
     const updatedSteps = wizards.map((step: Wizard) =>
       step.name === "SUMMARY" ? { ...step, locked: false } : step
     );
@@ -55,7 +55,7 @@ const AddOns = ({
     setSelected(addOnsContext);
   }, [addOnsContext]);
   return (
-    <FormContainer>
+    <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>
       <Box>
         <Typography variant="h5" gutterBottom>
           Pick add-ons
@@ -99,37 +99,8 @@ const AddOns = ({
           ))}
         </Grid>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          mb: 4,
-        }}
-      >
-        {activeStep !== totalSteps && (
-          <>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Button
-              variant="contained"
-              disabled={activeStep === totalSteps}
-              onClick={onConfirm}
-              sx={{ mt: 3, ml: 1 }}
-            >
-              {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
-            </Button>
-          </>
-        )}
-      </Box>
-    </FormContainer>
+      <ButtonNavigation />
+    </Box>
   );
 };
 

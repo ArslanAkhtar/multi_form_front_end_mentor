@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, Button, Typography, Box } from "@mui/material";
-import { type Plan } from "../helpers/types";
+import { type Plan } from "../../helpers/types";
 
 import Arcade from "@mui/icons-material/SmartToy";
 import Advanced from "@mui/icons-material/Laptop";
