@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { Grid, Typography, Button, Box } from "../../lib/mui";
-import { styled } from "@mui/system";
+import { Grid, Typography, Box } from "../../lib/mui";
+
 import { addons } from "../helpers/constants";
 import { AddOnsType, Wizard } from "../helpers/types";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
 import { useForm } from "react-hook-form";
 import ButtonNavigation from "./subComponents/ButtonNavigation";
+
+import AddOnCard from "./subComponents/AddOnCard";
 
 const FormContainer = {
   height: "100%",
@@ -15,11 +17,6 @@ const FormContainer = {
   flexDirection: "column",
   justifyContent: "space-between",
 };
-
-const ButtonTitle = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-});
 
 const AddOns = () => {
   const { handleSubmit } = useForm();
@@ -35,6 +32,11 @@ const AddOns = () => {
   const [selected, setSelected] = useState<AddOnsType[]>([]);
 
   const handleSelect = (addon: AddOnsType) => {
+    if (selected.includes(addon)) {
+      const newArr = selected.filter((item) => item !== addon);
+      setSelected(newArr);
+      return;
+    }
     addon.price =
       planContext?.type === "monthly" ? addon.monthlyPrice : addon.yearlyPrice;
     const newArr = [...selected, addon];
@@ -65,37 +67,13 @@ const AddOns = () => {
         </Typography>
         <Grid container spacing={3}>
           {addons.map((addon, index) => (
-            <Grid item xs={12} key={index}>
-              <Box
-                variant={selected.includes(addon) ? "contained" : "outlined"}
-                component={Button}
-                size="large"
-                sx={{ mt: 2, display: "flex", flexDirection: "row" }}
-                onClick={() => handleSelect(addon)}
-              >
-                <ButtonTitle>
-                  <Typography variant="h6" gutterBottom>
-                    {addon.title}
-                  </Typography>
-
-                  <Typography
-                    variant="subtitle2"
-                    color={selected.includes(addon) ? "#fff" : "#656565"}
-                  >
-                    {addon.description}
-                  </Typography>
-                </ButtonTitle>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ marginLeft: "40px" }}
-                >
-                  {planContext?.type === "monthly"
-                    ? addon.monthlyPrice
-                    : addon.yearlyPrice}
-                </Typography>
-              </Box>
-            </Grid>
+            <AddOnCard
+              addon={addon}
+              index={index}
+              selected={selected}
+              handleSelect={handleSelect}
+              key={index}
+            />
           ))}
         </Grid>
       </Box>

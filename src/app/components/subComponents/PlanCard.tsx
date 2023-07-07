@@ -47,6 +47,7 @@ const PlanCard = ({
 
   const CardContentStyle = {
     "@media (max-width:600px)": {
+      padding: "5px",
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
