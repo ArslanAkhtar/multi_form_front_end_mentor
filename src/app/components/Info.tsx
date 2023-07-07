@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -12,6 +12,7 @@ import {
 import type { Info, Wizard } from "../helpers/types";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
+import ButtonNavigation from "./subComponents/ButtonNavigation";
 
 const schema = z.object({
   name: z.string().nonempty("Full Name is required"),
@@ -33,7 +34,9 @@ const FormContainer = {
   justifyContent: "space-between",
 };
 
-import ButtonNavigation from "./subComponents/ButtonNavigation";
+// TODO: Need to improve useForm hook logic
+// TODO: Need to improve zod validation logic
+// TODO: Reduce Code Duplication
 
 const Info = () => {
   const {
@@ -48,7 +51,7 @@ const Info = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<Record<string, string>>({
+  } = useForm<Info>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: infoContext?.name || "",
@@ -57,14 +60,14 @@ const Info = () => {
     },
   });
 
-  const onSubmit = (data: Record<string, string>) => {
+  const onSubmit: SubmitHandler<Info> = (data) => {
     const updatedSteps = wizards.map((step: Wizard) =>
       step.name === "SELECT PLAN" ? { ...step, locked: false } : step
     );
 
     setCompletedWizards(updatedSteps);
 
-    setInfoContext(data as unknown as Info);
+    setInfoContext(data);
     handleNext();
   };
 
