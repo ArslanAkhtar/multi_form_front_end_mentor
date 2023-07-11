@@ -28,7 +28,7 @@ const FormContainer = {
 };
 
 const Home = () => {
-  const { activeStep } = useFormWizardContext();
+  const { currentStep } = useFormWizardContext();
 
   const theme = useTheme();
 
@@ -41,7 +41,7 @@ const Home = () => {
         <Paper sx={FormContainer}>
           {!isMobile && <StepperDesktop />}
           <FormWrapper>
-            {getStepContent(activeStep)}
+            {getStepContent(currentStep.id)}
             <Box
               sx={{
                 display: "flex",

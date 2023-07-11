@@ -1,12 +1,12 @@
 import styles from "./page.module.css";
 import Home from "./components/Home";
-import { AppContextProvider } from "./contexts/FormWizardContext";
+import { FormWizardContextProvider } from "./contexts/FormWizardContext";
 export default function App() {
   return (
-    <AppContextProvider>
+    <FormWizardContextProvider totalSteps={4}>
       <main className={styles.main}>
         <Home />
       </main>
-    </AppContextProvider>
+    </FormWizardContextProvider>
   );
 }

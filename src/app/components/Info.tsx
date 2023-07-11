@@ -39,43 +39,19 @@ const FormContainer = {
 // TODO: Reduce Code Duplication
 
 const Info = () => {
-  const {
-    infoContext,
-    setInfoContext,
-    wizards,
-    setCompletedWizards,
-    handleNext,
-  } = useFormWizardContext();
+  const { setDataAndGoToNextStep, data } = useFormWizardContext();
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<Info>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      name: infoContext?.name || "",
-      email: infoContext?.email || "",
-      phoneNumber: infoContext?.phoneNumber || "",
-    },
+    defaultValues: data,
   });
 
   const onSubmit: SubmitHandler<Info> = (data) => {
-    const updatedSteps = wizards.map((step: Wizard) =>
-      step.name === "SELECT PLAN" ? { ...step, locked: false } : step
-    );
-
-    setCompletedWizards(updatedSteps);
-
-    setInfoContext(data);
-    handleNext();
+    setDataAndGoToNextStep(data);
   };
-
-  useEffect(() => {
-    setValue("name", infoContext?.name || "");
-    setValue("email", infoContext?.email || "");
-    setValue("phoneNumber", infoContext?.phoneNumber || "");
-  }, [infoContext, setValue]);
 
   return (
     <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, Box } from "@mui/material";
+import { Card, CardContent, Radio, Typography, Box } from "@mui/material";
 import { type Plan } from "../../helpers/types";
 
 import Arcade from "@mui/icons-material/SmartToy";
@@ -8,31 +8,28 @@ import Pro from "@mui/icons-material/Games";
 
 interface PlanProps {
   plan: Plan;
-  selectedPlan: Plan | null;
-  selectedType: string | undefined;
-  isSelected?: boolean;
-  onSelect: (plan: Plan) => void;
+  register: any;
+  selectedPlanType: string;
+  // selectedPlan: Plan | null;
+  // selectedType: string | undefined;
+  // isSelected?: boolean;
+  // onSelect: (plan: Plan) => void;
 }
 
-const PlanCard = ({
-  plan,
-  selectedPlan,
-  selectedType,
-  onSelect,
-}: PlanProps) => {
+const PlanCard = ({ plan, register, selectedPlanType }: PlanProps) => {
   const [selected, setSelected] = useState(false);
-  useEffect(() => {
-    if (selectedPlan !== null && selectedPlan.title === plan.title) {
-      setSelected(true);
-    } else {
-      setSelected(false);
-    }
-  }, [selectedPlan, plan]);
+  // useEffect(() => {
+  //   if (selectedPlan !== null && selectedPlan.title === plan.title) {
+  //     setSelected(true);
+  //   } else {
+  //     setSelected(false);
+  //   }
+  // }, [selectedPlan, plan]);
 
-  const handleSelect = (plan: Plan) => {
-    setSelected(true);
-    const SelectedPlan = { ...plan, type: selectedType };
-    onSelect(SelectedPlan);
+  const handleSelect = (id: Plan) => {
+    // setSelected(true);
+    // const SelectedPlan = { ...plan, type: selectedType };
+    // onSelect(SelectedPlan);
   };
 
   const cardStyle = {
@@ -56,17 +53,7 @@ const PlanCard = ({
   };
 
   return (
-    <Card
-      sx={cardStyle}
-      component={Button}
-      onClick={() =>
-        handleSelect({
-          title: plan.title,
-          price:
-            selectedType === "monthly" ? plan.monthlyPrice : plan.yearlyPrice,
-        })
-      }
-    >
+    <Card sx={cardStyle} component={Radio} value={plan.id}>
       <CardContent sx={CardContentStyle}>
         {plan.title === "Arcade" ? (
           <Arcade />
@@ -80,7 +67,9 @@ const PlanCard = ({
             {plan.title}
           </Typography>
           <Typography variant="subtitle2" color={"#656565"}>
-            {selectedType === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
+            {selectedPlanType === "monthly"
+              ? plan.monthlyPrice
+              : plan.yearlyPrice}
           </Typography>
         </Box>
       </CardContent>

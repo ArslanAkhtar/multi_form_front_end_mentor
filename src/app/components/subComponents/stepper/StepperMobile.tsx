@@ -23,13 +23,13 @@ const FormNavigationMobile = {
 };
 
 const StepperMobile = () => {
-  const { wizards, activeStep, handleStep } = useFormWizardContext();
+  const { totalSteps, getStep, goToStep, currentStep } = useFormWizardContext();
 
   return (
     <Box sx={FormNavigationMobile}>
       <StepSection>
         <Stepper
-          activeStep={activeStep}
+          activeStep={currentStep.id}
           nonLinear
           orientation="horizontal"
           sx={{
@@ -39,12 +39,12 @@ const StepperMobile = () => {
             borderTop: "none",
           }}
         >
-          {wizards.map((item: Wizard, index: number) => (
-            <Step key={item.name}>
+          {[...Array(totalSteps)].map((__, index: number) => (
+            <Step key={index}>
               <StepButton
                 color="inherit"
-                disabled={item.locked}
-                onClick={handleStep(index)}
+                disabled={!getStep(index).visited}
+                onClick={() => goToStep(index)}
                 sx={{ color: "white" }}
               />
             </Step>

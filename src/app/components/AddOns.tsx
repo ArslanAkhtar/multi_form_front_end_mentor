@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
-import { Grid, Typography, Box } from "../../lib/mui";
+import {
+  Grid,
+  Typography,
+  Box,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+} from "../../lib/mui";
 
 import { addons } from "../helpers/constants";
-import { AddOnsType, Wizard } from "../helpers/types";
+import { AddOnsType, FormValues, Wizard } from "../helpers/types";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import ButtonNavigation from "./subComponents/ButtonNavigation";
 
 import AddOnCard from "./subComponents/AddOnCard";
@@ -18,44 +25,21 @@ const FormContainer = {
   justifyContent: "space-between",
 };
 
+type AddOns = {
+  addons: string[];
+};
+
 const AddOns = () => {
-  const { handleSubmit } = useForm();
+  const { setDataAndGoToNextStep, data } = useFormWizardContext<FormValues>();
 
-  const {
-    planContext,
-    addOnsContext,
-    setAddOnsContext,
-    wizards,
-    setCompletedWizards,
-    handleNext,
-  } = useFormWizardContext();
-  const [selected, setSelected] = useState<AddOnsType[]>([]);
+  const { handleSubmit, register } = useForm<Partial<FormValues>>({
+    defaultValues: data,
+  });
 
-  const handleSelect = (addon: AddOnsType) => {
-    if (selected.includes(addon)) {
-      const newArr = selected.filter((item) => item !== addon);
-      setSelected(newArr);
-      return;
-    }
-    addon.price =
-      planContext?.type === "monthly" ? addon.monthlyPrice : addon.yearlyPrice;
-    const newArr = [...selected, addon];
-    setSelected(newArr);
+  const onSubmit: SubmitHandler<Partial<FormValues>> = (data) => {
+    setDataAndGoToNextStep(data);
   };
 
-  const onSubmit = () => {
-    const updatedSteps = wizards.map((step: Wizard) =>
-      step.name === "SUMMARY" ? { ...step, locked: false } : step
-    );
-    setCompletedWizards(updatedSteps);
-
-    setAddOnsContext(selected);
-    handleNext();
-  };
-
-  useEffect(() => {
-    setSelected(addOnsContext);
-  }, [addOnsContext]);
   return (
     <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -66,13 +50,13 @@ const AddOns = () => {
           Add-ons help enhance your gaming experience.
         </Typography>
         <Grid container spacing={3}>
-          {addons.map((addon, index) => (
-            <AddOnCard
-              addon={addon}
-              index={index}
-              selected={selected}
-              handleSelect={handleSelect}
+          {addons.map((addon: AddOnsType, index: number) => (
+            <FormControlLabel
+              control={<Checkbox />}
+              label={addon.title}
               key={index}
+              value={addon.id}
+              {...register("addonsIds")}
             />
           ))}
         </Grid>

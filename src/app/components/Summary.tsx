@@ -11,23 +11,35 @@ const FormContainer = {
 import { useForm } from "react-hook-form";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
-import { totalCost } from "../helpers/helper";
+import {
+  createSelectPlan,
+  createSelectedAddOns,
+  totalCost,
+} from "../helpers/helper";
 import ButtonNavigation from "./subComponents/ButtonNavigation";
+import { AddOnsType, FormValues, Plan } from "../helpers/types";
 
 const Summary = () => {
   const { handleSubmit } = useForm();
 
-  const { planContext, addOnsContext, handleBack, handleNext, handleStep } =
-    useFormWizardContext();
+  const { nextStep, data, goToStep } = useFormWizardContext<FormValues>();
 
-  const sumOfCost = totalCost(planContext, addOnsContext);
+  const selectedPlan = createSelectPlan(
+    data.planId as string,
+    data.planDuration as boolean
+  );
+  const selectedAddOns = createSelectedAddOns(
+    data.addonsIds as string[],
+    data.planDuration as boolean
+  );
+
+  const sumOfCost = totalCost(
+    selectedPlan as Plan,
+    selectedAddOns as AddOnsType[]
+  );
 
   return (
-    <Box
-      sx={FormContainer}
-      component="form"
-      onSubmit={handleSubmit(handleNext)}
-    >
+    <Box sx={FormContainer} component="form" onSubmit={handleSubmit(nextStep)}>
       <Box>
         <Typography variant="h5" gutterBottom>
           Finishing up
@@ -52,14 +64,9 @@ const Summary = () => {
                     gutterBottom
                     sx={{ fontWeight: "normal" }}
                   >
-                    {planContext?.title} ({planContext?.type})
+                    {selectedPlan?.title} ({selectedPlan?.type})
                   </Typography>
-                  <Link
-                    sx={{ cursor: "pointer" }}
-                    onClick={() => {
-                      () => handleStep(1);
-                    }}
-                  >
+                  <Link sx={{ cursor: "pointer" }} onClick={() => goToStep(2)}>
                     Change
                   </Link>
                 </Box>
@@ -68,15 +75,16 @@ const Summary = () => {
                   gutterBottom
                   sx={{ mt: 2, ml: 2, fontWeight: "bolder" }}
                 >
-                  {planContext?.price}
+                  +${selectedPlan?.price}/
+                  {selectedPlan?.type === "monthly" ? "mo" : "yr"}
                 </Typography>
               </Box>
-              {addOnsContext && addOnsContext.length > 0 && (
+              {selectedAddOns && selectedAddOns.length > 0 && (
                 <Divider variant="middle" />
               )}
 
               <Box sx={{ padding: "15px" }}>
-                {addOnsContext?.map((addon, index) => {
+                {selectedAddOns?.map((addon, index) => {
                   return (
                     <Box
                       key={index}
@@ -99,7 +107,8 @@ const Summary = () => {
                         gutterBottom
                         sx={{ fontWeight: "normal" }}
                       >
-                        {addon.price}
+                        +${addon.price}/
+                        {selectedPlan?.type === "monthly" ? "mo" : "yr"}
                       </Typography>
                     </Box>
                   );

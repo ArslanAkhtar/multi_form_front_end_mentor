@@ -1,92 +1,93 @@
 "use client";
 import { createContext, useState, useContext, ReactNode } from "react";
-import type { Info, Plan, AddOnsType, Wizard } from "../helpers/types";
-import { steps } from "../helpers/constants";
 
-// TODO:Improve step selection using context and update the steps selection and lock methods.
-// TODO: Delete extra code create single array with steps object and array items representing the steps.
-// TODO: Update the methods make it more generic and reusable.
+type Step = {
+  id: number;
+  visited: boolean;
+};
 
-interface AppContextData {
-  wizards: Wizard[];
-  setCompletedWizards: React.Dispatch<React.SetStateAction<Wizard[]>>;
-  infoContext: Info | null;
-  setInfoContext: React.Dispatch<React.SetStateAction<Info | null>>;
-  planContext: Plan | null;
-  setPlanContext: React.Dispatch<React.SetStateAction<Plan | null>>;
-  addOnsContext: AddOnsType[];
-  setAddOnsContext: React.Dispatch<React.SetStateAction<AddOnsType[]>>;
-
-  activeStep: number;
+interface WizardState<TFormData = unknown> {
+  currentStep: Step;
   totalSteps: number;
-  handleBack: () => void;
-  handleNext: () => void;
-  handleStep: (step: number) => () => void;
+  data: Partial<TFormData>;
+  getStep(step: number): Step;
+  setData: (data: Partial<TFormData>) => void;
+  setDataAndGoToNextStep: (data: Partial<TFormData>) => void;
+  nextStep: () => void;
+  goToStep: (step: number) => void;
+  previousStep: () => void;
 }
 
-const AppContext = createContext<AppContextData | undefined>(undefined);
+const WizardContext = createContext<WizardState | undefined>(undefined);
 
-const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [activeStep, setActiveStep] = useState(0);
-  const totalSteps = steps.length;
-  const [wizards, setCompletedWizards] = useState<Wizard[]>(steps);
-  const [infoContext, setInfoContext] = useState<Info | null>(null);
-  const [planContext, setPlanContext] = useState<Plan | null>(null);
-  const [addOnsContext, setAddOnsContext] = useState<AddOnsType[]>([]);
+const FormWizardContextProvider = <TFormData,>({
+  children,
+  totalSteps,
+}: {
+  children: ReactNode;
+  totalSteps: number;
+}) => {
+  const [steps, setSteps] = useState<Record<number, Omit<Step, "id">>>({});
 
-  const handleStep = (step: number) => () => {
-    setActiveStep(step);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [data, setData] = useState<Partial<TFormData>>({});
+
+  const nextStep = () => {
+    goToStep(Math.min(currentStep + 1, totalSteps));
   };
 
-  const handleBack = () => {
-    if (!isFirstStep()) {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const goToStep = (step: number) => {
+    if (step < 0 || step > totalSteps) {
+      return;
     }
+
+    setSteps((prevSteps) => ({
+      ...prevSteps,
+      [step]: { ...prevSteps[step], visited: true },
+    }));
+    setCurrentStep(step);
   };
 
-  const handleNext = () => {
-    if (!isLastStep()) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
+  const previousStep = () => {
+    goToStep(Math.max(currentStep - 1, 0));
   };
 
-  const isLastStep = () => {
-    return activeStep === totalSteps;
+  const setDataAndGoToNextStep = (data: Partial<TFormData>) => {
+    setData(data);
+    nextStep();
   };
 
-  const isFirstStep = () => {
-    return activeStep === 0;
+  const getStep = (step: number) => {
+    return { id: step, ...steps[step] };
   };
 
   return (
-    <AppContext.Provider
+    <WizardContext.Provider
       value={{
-        wizards,
-        setCompletedWizards,
-        infoContext,
-        setInfoContext,
-        planContext,
-        setPlanContext,
-        addOnsContext,
-        setAddOnsContext,
-        activeStep,
         totalSteps,
-        handleBack,
-        handleNext,
-        handleStep,
+        currentStep: getStep(currentStep),
+        data,
+        getStep,
+        setData,
+        setDataAndGoToNextStep,
+        nextStep,
+        goToStep,
+        previousStep,
       }}
     >
       {children}
-    </AppContext.Provider>
+    </WizardContext.Provider>
   );
 };
 
-const useFormWizardContext = () => {
-  const context = useContext(AppContext);
+const useFormWizardContext = <
+  TFormData = unknown,
+>(): WizardState<TFormData> => {
+  const context = useContext(WizardContext);
   if (!context) {
     throw new Error("useMyContext must be used within a MyContextProvider");
   }
   return context;
 };
 
-export { useFormWizardContext, AppContextProvider };
+export { useFormWizardContext, FormWizardContextProvider };

@@ -21,25 +21,25 @@ const NavigationContainer = {
 };
 
 const ButtonNavigation = () => {
-  const { activeStep, totalSteps, handleBack } = useFormWizardContext();
+  const { currentStep, totalSteps, previousStep } = useFormWizardContext();
 
   return (
     <Box sx={NavigationContainer}>
-      {activeStep !== totalSteps && (
+      {currentStep.id !== totalSteps && (
         <>
           <Button
             color="inherit"
-            disabled={activeStep === 0}
-            onClick={handleBack}
+            disabled={currentStep.id === 0}
+            onClick={previousStep}
           >
             Back
           </Button>
           <Button
             type="submit"
             variant="contained"
-            disabled={activeStep === totalSteps}
+            disabled={currentStep.id === totalSteps}
           >
-            {activeStep === totalSteps - 1 ? "Confirm" : "Next"}
+            {currentStep.id === totalSteps - 1 ? "Confirm" : "Next"}
           </Button>
         </>
       )}

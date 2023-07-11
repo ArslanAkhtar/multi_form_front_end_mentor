@@ -1,4 +1,5 @@
 import { useFormWizardContext } from "@/app/contexts/FormWizardContext";
+import { steps } from "@/app/helpers/constants";
 import { Wizard } from "@/app/helpers/types";
 import { Box, Step, StepButton, Stepper, Typography, styled } from "@/lib/mui";
 
@@ -24,13 +25,13 @@ const FormNavigation = {
 };
 
 const StepperDesktop = () => {
-  const { wizards, activeStep, handleStep } = useFormWizardContext();
+  const { currentStep, totalSteps, goToStep, getStep } = useFormWizardContext();
 
   return (
     <Box sx={FormNavigation}>
       <StepSection>
         <Stepper
-          activeStep={activeStep}
+          activeStep={currentStep.id}
           nonLinear
           orientation="vertical"
           sx={{
@@ -40,9 +41,9 @@ const StepperDesktop = () => {
             },
           }}
         >
-          {wizards.map((item: Wizard, index: number) => (
+          {[...Array(totalSteps)].map((_, index) => (
             <Step
-              key={item.name}
+              key={index}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -51,8 +52,8 @@ const StepperDesktop = () => {
             >
               <StepButton
                 color="inherit"
-                disabled={item.locked}
-                onClick={handleStep(index)}
+                disabled={!getStep(index).visited}
+                onClick={() => goToStep(index)}
                 sx={{
                   color: "white",
                   width: "auto",
@@ -67,7 +68,7 @@ const StepperDesktop = () => {
                   color="#fff"
                   sx={{ fontWeight: "bold" }}
                 >
-                  {item.name}
+                  {steps[index].name}
                 </Typography>
               </Box>
             </Step>
