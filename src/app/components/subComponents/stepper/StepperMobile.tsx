@@ -22,6 +22,23 @@ const FormNavigationMobile = {
   left: 0,
 };
 
+const StepButtonCustom = styled(StepButton)({
+  "& .MuiSvgIcon-root": {
+    fontSize: "2.2rem",
+    color: "transparent",
+    border: "2px solid #bee1fd",
+    borderRadius: "50%",
+
+    "&.Mui-active": {
+      color: "#bee1fd",
+      border: "none",
+      "& .MuiStepIcon-text": {
+        fill: "#000",
+      },
+    },
+  },
+});
+
 const StepperMobile = () => {
   const { totalSteps, getStep, goToStep, currentStep } = useFormWizardContext();
 
@@ -41,7 +58,7 @@ const StepperMobile = () => {
         >
           {[...Array(totalSteps)].map((__, index: number) => (
             <Step key={index}>
-              <StepButton
+              <StepButtonCustom
                 color="inherit"
                 disabled={!getStep(index).visited}
                 onClick={() => goToStep(index)}

@@ -1,6 +1,5 @@
 import { useFormWizardContext } from "@/app/contexts/FormWizardContext";
 import { steps } from "@/app/helpers/constants";
-import { Wizard } from "@/app/helpers/types";
 import { Box, Step, StepButton, Stepper, Typography, styled } from "@/lib/mui";
 
 const StepSection = styled("div")({
@@ -24,6 +23,23 @@ const FormNavigation = {
   },
 };
 
+const StepButtonCustom = styled(StepButton)({
+  "& .MuiSvgIcon-root": {
+    fontSize: "2.2rem",
+    color: "transparent",
+    border: "2px solid #bee1fd",
+    borderRadius: "50%",
+
+    "&.Mui-active": {
+      color: "#bee1fd",
+      border: "none",
+      "& .MuiStepIcon-text": {
+        fill: "#000",
+      },
+    },
+  },
+});
+
 const StepperDesktop = () => {
   const { currentStep, totalSteps, goToStep, getStep } = useFormWizardContext();
 
@@ -41,7 +57,7 @@ const StepperDesktop = () => {
             },
           }}
         >
-          {[...Array(totalSteps)].map((_, index) => (
+          {[...Array(totalSteps)].map((__, index: number) => (
             <Step
               key={index}
               sx={{
@@ -50,27 +66,31 @@ const StepperDesktop = () => {
                 alignItems: "center",
               }}
             >
-              <StepButton
-                color="inherit"
+              <StepButtonCustom
                 disabled={!getStep(index).visited}
                 onClick={() => goToStep(index)}
                 sx={{
-                  color: "white",
+                  color: "secondary.main",
                   width: "auto",
                 }}
-              />
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography variant="subtitle2" color="#7d78ff">
-                  STEP {index + 1}
-                </Typography>
-                <Typography
-                  variant="subtitle2"
-                  color="#fff"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  {steps[index].name}
-                </Typography>
-              </Box>
+              >
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Typography
+                    variant="subtitle2"
+                    color="#7d78ff"
+                    sx={{ fontFamily: "Ubuntu-reg" }}
+                  >
+                    STEP {index + 1}
+                  </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    color="#fff"
+                    sx={{ fontFamily: "Ubuntu-bold" }}
+                  >
+                    {steps[index].name}
+                  </Typography>
+                </Box>
+              </StepButtonCustom>
             </Step>
           ))}
         </Stepper>

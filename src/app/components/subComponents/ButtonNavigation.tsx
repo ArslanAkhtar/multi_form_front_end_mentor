@@ -24,20 +24,29 @@ const ButtonNavigation = () => {
   const { currentStep, totalSteps, previousStep } = useFormWizardContext();
 
   return (
-    <Box sx={NavigationContainer}>
+    <Box
+      sx={{
+        ...NavigationContainer,
+        justifyContent: currentStep.id === 0 ? "flex-end" : "space-between",
+      }}
+    >
       {currentStep.id !== totalSteps && (
         <>
-          <Button
-            color="inherit"
-            disabled={currentStep.id === 0}
-            onClick={previousStep}
-          >
-            Go Back
-          </Button>
+          {currentStep.id !== 0 && (
+            <Button
+              color="inherit"
+              onClick={previousStep}
+              sx={{ fontFamily: "Ubuntu-bold" }}
+            >
+              Go Back
+            </Button>
+          )}
+
           <Button
             type="submit"
             variant="contained"
             disabled={currentStep.id === totalSteps}
+            sx={{ fontFamily: "Ubuntu-bold" }}
           >
             {currentStep.id === totalSteps - 1 ? "Confirm" : "Next"}
           </Button>
