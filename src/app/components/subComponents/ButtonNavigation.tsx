@@ -32,7 +32,7 @@ const ButtonNavigation = () => {
             disabled={currentStep.id === 0}
             onClick={previousStep}
           >
-            Back
+            Go Back
           </Button>
           <Button
             type="submit"

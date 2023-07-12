@@ -9,7 +9,7 @@ import {
   FormHelperText,
   Box,
 } from "@mui/material";
-import type { Info, Wizard } from "../helpers/types";
+import type { Info } from "../helpers/types";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
 import ButtonNavigation from "./subComponents/ButtonNavigation";
@@ -33,10 +33,6 @@ const FormContainer = {
   flexDirection: "column",
   justifyContent: "space-between",
 };
-
-// TODO: Need to improve useForm hook logic
-// TODO: Need to improve zod validation logic
-// TODO: Reduce Code Duplication
 
 const Info = () => {
   const { setDataAndGoToNextStep, data } = useFormWizardContext();

@@ -52,11 +52,11 @@ export const createSelectedAddOns = (
   addOnsIds: string[],
   planDuration: boolean
 ) => {
-  const selectedAddons = addOnsIds.map((id: string) =>
+  const selectedAddons = addOnsIds?.map((id: string) =>
     addons.find((addon) => addon.id === id)
   );
 
-  return selectedAddons.map((addon) => ({
+  return selectedAddons?.map((addon) => ({
     id: addon?.id,
     title: addon?.title,
     price: planDuration ? addon?.yearlyPrice : addon?.monthlyPrice,

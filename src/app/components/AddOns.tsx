@@ -1,21 +1,14 @@
 import { useState, useEffect } from "react";
-import {
-  Grid,
-  Typography,
-  Box,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
-} from "../../lib/mui";
+import { Grid, Typography, Box, Checkbox } from "../../lib/mui";
 
 import { addons } from "../helpers/constants";
-import { AddOnsType, FormValues, Wizard } from "../helpers/types";
+import { FormValues } from "../helpers/types";
 
 import { useFormWizardContext } from "../contexts/FormWizardContext";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import ButtonNavigation from "./subComponents/ButtonNavigation";
 
-import AddOnCard from "./subComponents/AddOnCard";
+import { DevTool } from "@hookform/devtools";
 
 const FormContainer = {
   height: "100%",
@@ -31,13 +24,59 @@ type AddOns = {
 
 const AddOns = () => {
   const { setDataAndGoToNextStep, data } = useFormWizardContext<FormValues>();
+  const [addonsIdsChanged, setAddonsIdsChanged] = useState<number | null>(null);
 
-  const { handleSubmit, register } = useForm<Partial<FormValues>>({
+  const { handleSubmit, control, getValues, setValue } = useForm<
+    Partial<FormValues>
+  >({
     defaultValues: data,
   });
 
   const onSubmit: SubmitHandler<Partial<FormValues>> = (data) => {
     setDataAndGoToNextStep(data);
+  };
+
+  const ButtonTitle = {
+    display: "flex",
+    flexDirection: "column",
+    minWidth: "180px",
+
+    "@media (max-width:600px)": {
+      minWidth: "170px",
+    },
+  };
+
+  const cardStyle = {
+    minWidth: 155,
+    cursor: "pointer",
+    border: "1px solid",
+
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "35px",
+    borderRadius: "10px",
+    padding: "20px",
+    borderColor: "#e0e0e0",
+    "@media (max-width:600px)": {
+      minWidth: "auto",
+    },
+    "&:hover": {
+      borderColor: "#3f51b5",
+      backgroundColor: "#f8f9fe",
+    },
+  };
+
+  const handleAddOnClick = (id: string): void => {
+    const oldVal = getValues("addonsIds") || [];
+    if (oldVal.includes(id)) {
+      const newVal = oldVal.filter((item) => item !== id);
+      setValue("addonsIds", newVal);
+      return;
+    } else {
+      setValue("addonsIds", [...oldVal, id]);
+    }
+    setAddonsIdsChanged((prevKey) => (prevKey === null ? 0 : prevKey + 1));
   };
 
   return (
@@ -49,19 +88,72 @@ const AddOns = () => {
         <Typography variant="subtitle2" color={"#656565"} gutterBottom>
           Add-ons help enhance your gaming experience.
         </Typography>
-        <Grid container spacing={3}>
-          {addons.map((addon: AddOnsType, index: number) => (
-            <FormControlLabel
-              control={<Checkbox />}
-              label={addon.title}
-              key={index}
-              value={addon.id}
-              {...register("addonsIds")}
-            />
-          ))}
+        <Grid container spacing={3} sx={{ mt: "10px", ml: "1px" }}>
+          <Controller
+            key={addonsIdsChanged}
+            name="addonsIds"
+            control={control}
+            render={() => (
+              <Box
+                sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
+              >
+                {addons.map((addon, index: number) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      ...cardStyle,
+                      borderColor: getValues("addonsIds")?.includes(addon.id)
+                        ? "#3f51b5"
+                        : "#e0e0e0",
+                      backgroundColor: getValues("addonsIds")?.includes(
+                        addon.id
+                      )
+                        ? "#f8f9fe"
+                        : "#fff",
+                    }}
+                    onClick={() => handleAddOnClick(addon.id)}
+                  >
+                    <Checkbox
+                      value={addon.id}
+                      checked={getValues("addonsIds")?.includes(addon.id)}
+                    />
+                    <Box sx={ButtonTitle}>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        sx={{ fontSize: "12px", fontWeight: "bold" }}
+                      >
+                        {addon.title}
+                      </Typography>
+
+                      <Typography variant="subtitle2" sx={{ fontSize: "10px" }}>
+                        {addon.description}
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{
+                        marginLeft: "20px",
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      +$
+                      {getValues("planDuration")
+                        ? addon.monthlyPrice
+                        : addon.yearlyPrice}
+                      /{getValues("planDuration") ? "yr" : "mo"}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          />
         </Grid>
       </Box>
       <ButtonNavigation />
+      <DevTool control={control} />
     </Box>
   );
 };
