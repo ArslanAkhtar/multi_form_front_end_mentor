@@ -33,10 +33,9 @@ const Complete = () => {
               }}
             />
             <Typography
-              variant="h3"
+              variant="h1"
               gutterBottom
               sx={{
-                fontWeight: "bold",
                 color: "#022b58",
                 textAlign: "center",
                 mt: 2,

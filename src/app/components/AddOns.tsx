@@ -42,7 +42,7 @@ const AddOns = () => {
     minWidth: "180px",
 
     "@media (max-width:600px)": {
-      minWidth: "170px",
+      minWidth: "auto",
     },
   };
 
@@ -60,6 +60,9 @@ const AddOns = () => {
     borderColor: "#e0e0e0",
     "@media (max-width:600px)": {
       minWidth: "auto",
+      gap: "0px",
+      padding: "10px",
+      justifyContent: "space-between",
     },
     "&:hover": {
       borderColor: "#3f51b5",
@@ -81,21 +84,33 @@ const AddOns = () => {
 
   return (
     <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Box>
-        <Typography variant="h5" gutterBottom>
+      <Box sx={{ width: "100%" }}>
+        <Typography variant="h1" gutterBottom>
           Pick add-ons
         </Typography>
         <Typography variant="subtitle2" color={"#656565"} gutterBottom>
           Add-ons help enhance your gaming experience.
         </Typography>
-        <Grid container spacing={3} sx={{ mt: "10px", ml: "1px" }}>
+        <Grid
+          container
+          spacing={3}
+          sx={{ mt: "10px", ml: "1px", width: "100%" }}
+        >
           <Controller
             key={addonsIdsChanged}
             name="addonsIds"
             control={control}
             render={() => (
               <Box
-                sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                  width: "100%",
+                  "@media (max-width:600px)": {
+                    gap: "15px",
+                  },
+                }}
               >
                 {addons.map((addon, index: number) => (
                   <Box
@@ -120,24 +135,37 @@ const AddOns = () => {
                     <Box sx={ButtonTitle}>
                       <Typography
                         variant="h6"
+                        sx={{
+                          "@media (max-width:600px)": {
+                            fontSize: "12px",
+                          },
+                        }}
                         gutterBottom
-                        sx={{ fontSize: "12px", fontWeight: "bold" }}
                       >
                         {addon.title}
                       </Typography>
 
-                      <Typography variant="subtitle2" sx={{ fontSize: "10px" }}>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          color: "#bebec8",
+                          "@media (max-width:600px)": {
+                            fontSize: "12px",
+                          },
+                        }}
+                      >
                         {addon.description}
                       </Typography>
                     </Box>
                     <Typography
                       variant="h6"
-                      gutterBottom
+                      color="#5b4fc2"
                       sx={{
-                        marginLeft: "20px",
-                        fontSize: "12px",
-                        fontWeight: "bold",
+                        "@media (max-width:600px)": {
+                          fontSize: "12px",
+                        },
                       }}
+                      gutterBottom
                     >
                       +$
                       {getValues("planDuration")

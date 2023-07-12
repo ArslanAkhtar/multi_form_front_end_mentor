@@ -129,12 +129,41 @@ const SelectPlan = () => {
     padding: "20px",
     borderColor: "#e0e0e0",
     "@media (max-width:600px)": {
+      gap: "15px",
       minWidth: "auto",
+      width: "100%",
+      padding: "10px 20px",
     },
     "&:hover": {
       borderColor: "#3f51b5",
       backgroundColor: "#f8f9fe",
     },
+  };
+
+  const cardContent = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "35px",
+
+    "@media (max-width:600px)": {
+      flexDirection: "row",
+      gap: "35px",
+      alignItems: "center",
+    },
+  };
+
+  const cardWrap = {
+    display: "flex",
+    flexDirection: "row",
+    gap: "35px",
+    "@media (max-width:600px)": {
+      gap: "15px",
+    },
+  };
+
+  const cardTitle = {
+    display: "flex",
+    flexDirection: "column",
   };
 
   return (
@@ -145,7 +174,7 @@ const SelectPlan = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Box>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h1" gutterBottom>
             Select your plan
           </Typography>
           <Typography variant="subtitle2" color={"#656565"} gutterBottom>
@@ -163,11 +192,7 @@ const SelectPlan = () => {
                       aria-labelledby="demo-radio-buttons-group-label"
                       defaultValue="female"
                       name="radio-buttons-group"
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "35px",
-                      }}
+                      sx={cardWrap}
                     >
                       {plans.map((plan, index) => (
                         <Box
@@ -191,31 +216,30 @@ const SelectPlan = () => {
                             checked={getValues("planId") === plan.id}
                           />
 
-                          <Box
-                            style={{ display: "flex", flexDirection: "column" }}
-                          >
+                          <Box sx={cardContent}>
                             <Image
                               src={`/assets/images/${plan.title}.svg`}
                               alt={plan.title}
                               width={32}
                               height={32}
                             />
-                            <Typography
-                              sx={{ mt: "20px" }}
-                              variant="h6"
-                              component="div"
-                              gutterBottom
-                              color={"#1e3251"}
-                            >
-                              {plan.title}
-                            </Typography>
-                            <Typography variant="subtitle2" color={"#bcbcc6"}>
-                              $
-                              {planDuration
-                                ? plan.yearlyPrice
-                                : plan.monthlyPrice}
-                              /{planDuration ? "yr" : "mo"}
-                            </Typography>
+                            <Box sx={cardTitle}>
+                              <Typography
+                                variant="h6"
+                                component="div"
+                                gutterBottom
+                                color={"#1e3251"}
+                              >
+                                {plan.title}
+                              </Typography>
+                              <Typography variant="subtitle2" color={"#bcbcc6"}>
+                                $
+                                {planDuration
+                                  ? plan.yearlyPrice
+                                  : plan.monthlyPrice}
+                                /{planDuration ? "yr" : "mo"}
+                              </Typography>
+                            </Box>
                             {planDuration && (
                               <Typography variant="subtitle2" color={"#1e3251"}>
                                 2 months free

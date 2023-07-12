@@ -41,7 +41,7 @@ const Summary = () => {
   return (
     <Box sx={FormContainer} component="form" onSubmit={handleSubmit(nextStep)}>
       <Box>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h1" gutterBottom>
           Finishing up
         </Typography>
         <Typography variant="subtitle2" color={"#656565"} gutterBottom>

@@ -24,6 +24,42 @@ declare module "@mui/material/Typography/Typography" {
 export const theme = createTheme({
   typography: {
     fontFamily: "Ubuntu-reg, Ubuntu-medium, Ubuntu-bold",
+    h1: {
+      fontSize: "2.5rem",
+      fontFamily: "Ubuntu-bold",
+    },
+    h2: {
+      fontSize: "2rem",
+      fontFamily: "Ubuntu-bold",
+    },
+    h3: {
+      fontSize: "1.75rem",
+      fontFamily: "Ubuntu-bold",
+    },
+    h4: {
+      fontSize: "1.5rem",
+      fontFamily: "Ubuntu-bold",
+    },
+    h5: {
+      fontSize: "1.25rem",
+      fontFamily: "Ubuntu-bold",
+    },
+    h6: {
+      fontSize: "1rem",
+      fontFamily: "Ubuntu-bold",
+    },
+    subtitle1: {
+      fontSize: "1rem",
+      fontFamily: "Ubuntu-medium",
+    },
+    subtitle2: {
+      fontSize: "0.875rem",
+      fontFamily: "Ubuntu-medium",
+    },
+    body1: {
+      fontSize: "0.875rem",
+      fontFamily: "Ubuntu-reg",
+    },
   },
   palette: {
     primary: {
@@ -35,19 +71,6 @@ export const theme = createTheme({
     customColor: {
       main: "#ff0000", // Replace with your custom color
       secondary: "#00ff00", // Replace with another custom color
-    },
-  },
-  components: {
-    // Name of the component
-    MuiStepButton: {
-      styleOverrides: {
-        // Name of the slot
-        root: {
-          // Some CSS
-          fontSize: "5rem",
-          color: "white",
-        },
-      },
     },
   },
 });

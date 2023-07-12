@@ -52,7 +52,7 @@ const Info = () => {
   return (
     <Box sx={FormContainer} component="form" onSubmit={handleSubmit(onSubmit)}>
       <Box>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h1" gutterBottom>
           Personal info
         </Typography>
         <Typography variant="subtitle2" color="#656565" gutterBottom>
@@ -79,7 +79,7 @@ const Info = () => {
                     }}
                   />
                   {errors.name && (
-                    <Typography variant="body2" color="error">
+                    <Typography variant="body1" color="error">
                       {errors.name.message}
                     </Typography>
                   )}
