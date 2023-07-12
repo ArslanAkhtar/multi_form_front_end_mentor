@@ -18,7 +18,6 @@ export const totalCost = (selectedPlan: Plan, selectedAddOns: AddOnsType[]) => {
 };
 
 export const getStepContent = (step: number): React.ReactNode => {
-  console.log("step", step);
   const componentsMap: { [key: number]: React.ReactNode } = {
     0: <Info />,
     1: <SelectPlan />,
