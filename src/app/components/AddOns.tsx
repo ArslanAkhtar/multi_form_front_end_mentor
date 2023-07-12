@@ -50,19 +50,17 @@ const AddOns = () => {
     minWidth: 155,
     cursor: "pointer",
     border: "1px solid",
-
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: "35px",
     borderRadius: "10px",
     padding: "20px",
     borderColor: "#e0e0e0",
+    justifyContent: "space-between",
     "@media (max-width:600px)": {
       minWidth: "auto",
       gap: "0px",
       padding: "10px",
-      justifyContent: "space-between",
     },
     "&:hover": {
       borderColor: "#3f51b5",
@@ -128,34 +126,45 @@ const AddOns = () => {
                     }}
                     onClick={() => handleAddOnClick(addon.id)}
                   >
-                    <Checkbox
-                      value={addon.id}
-                      checked={getValues("addonsIds")?.includes(addon.id)}
-                    />
-                    <Box sx={ButtonTitle}>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          "@media (max-width:600px)": {
-                            fontSize: "12px",
-                          },
-                        }}
-                        gutterBottom
-                      >
-                        {addon.title}
-                      </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "35px",
+                        "@media (max-width:600px)": {
+                          gap: "15px",
+                        },
+                      }}
+                    >
+                      <Checkbox
+                        value={addon.id}
+                        checked={getValues("addonsIds")?.includes(addon.id)}
+                      />
+                      <Box sx={ButtonTitle}>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            "@media (max-width:600px)": {
+                              fontSize: "12px",
+                            },
+                          }}
+                          gutterBottom
+                        >
+                          {addon.title}
+                        </Typography>
 
-                      <Typography
-                        variant="subtitle2"
-                        sx={{
-                          color: "#bebec8",
-                          "@media (max-width:600px)": {
-                            fontSize: "12px",
-                          },
-                        }}
-                      >
-                        {addon.description}
-                      </Typography>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{
+                            color: "#bebec8",
+                            "@media (max-width:600px)": {
+                              fontSize: "12px",
+                            },
+                          }}
+                        >
+                          {addon.description}
+                        </Typography>
+                      </Box>
                     </Box>
                     <Typography
                       variant="h6"
